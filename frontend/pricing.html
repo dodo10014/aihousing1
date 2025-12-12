@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Pricing – AiHousing</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Inter", sans-serif;
+      background: #f8fafc;
+      color: #0f172a;
+    }
+
+    /* HEADER */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 99;
+      background: #ffffffee;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 16px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      backdrop-filter: blur(12px);
+    }
+
+    .logo-wrap {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      display: flex;
+      align-items: center;
+      color: #0f172a;
+    }
+
+    .logo-dot {
+      width: 9px;
+      height: 9px;
+      background: #22c55e;
+      border-radius: 50%;
+      margin-left: 4px;
+      margin-bottom: -2px;
+      box-shadow: 0 0 8px #22c55e;
+    }
+
+    nav {
+      display: flex;
+      gap: 26px;
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    nav a {
+      color: #0f172a;
+      text-decoration: none;
+      transition: .2s;
+    }
+
+    nav a:hover { color: #22c55e; }
+    nav a.active { color: #22c55e; font-weight: 700; }
+
+    /* PAGE */
+    .page {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 50px 20px 80px;
+    }
+
+    .pricing-head {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .pricing-title {
+      font-size: 42px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 10px;
+    }
+
+    .pricing-sub {
+      font-size: 16px;
+      color: #64748b;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    /* PLAN CARDS */
+    .plans-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 26px;
+      margin-top: 40px;
+    }
+
+    .plan-card {
+      background: #ffffff;
+      padding: 30px 26px;
+      border-radius: 20px;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 12px 35px rgba(15,23,42,0.06);
+      transition: .25s;
+    }
+
+    .plan-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 45px rgba(15,23,42,0.09);
+    }
+
+    .plan-title {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .plan-desc {
+      color: #64748b;
+      margin-bottom: 18px;
+      font-size: 14px;
+      height: 38px;
+    }
+
+    .price {
+      font-size: 36px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .price-small {
+      font-size: 14px;
+      color: #64748b;
+    }
+
+    .old-price {
+      text-decoration: line-through;
+      color: #9ca3af;
+      font-size: 16px;
+      margin-left: 6px;
+    }
+
+    .btn-buy {
+      display: block;
+      margin-top: 20px;
+      background: #22c55e;
+      padding: 13px;
+      border-radius: 14px;
+      color: white;
+      text-align: center;
+      font-weight: 700;
+      font-size: 15px;
+      text-decoration: none;
+      transition: .25s;
+    }
+
+    .btn-buy:hover {
+      background: #15803d;
+    }
+
+    .plan-features {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 14px;
+      color: #475569;
+    }
+
+    .plan-features div {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .check {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #dcfce7;
+      color: #16a34a;
+      font-weight: 700;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 12px;
+    }
+
+    /* FAQ */
+    .faq-title {
+      margin-top: 60px;
+      font-size: 28px;
+      font-weight: 800;
+      text-align: center;
+    }
+
+    .faq-grid {
+      max-width: 850px;
+      margin: 30px auto 0;
+      display: grid;
+      gap: 24px;
+    }
+
+    .faq-item {
+      font-size: 15px;
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 20px 22px;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 6px 20px rgba(15,23,42,0.04);
+    }
+
+    .faq-q {
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .faq-a {
+      color: #64748b;
+      font-size: 14px;
+    }
+
+    /* FOOTER */
+    footer {
+      margin-top: 90px;
+      background: #ffffff;
+      border-top: 1px solid #e5e7eb;
+      padding: 30px;
+      text-align: center;
+      color: #6b7280;
+      font-size: 14px;
+    }
+
+    footer a {
+      margin: 0 10px;
+      color: #0f172a;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    footer a:hover { color: #22c55e; }
+
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo-wrap">AiHousing<div class="logo-dot"></div></div>
+
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="sample-report.html">Sample</a>
+    <a href="pricing.html" class="active">Pricing</a>
+    <a href="help.html">Help</a>
+    <a href="login.html">Login</a>
+  </nav>
+</header>
+
+
+<div class="page">
+
+  <!-- HEAD -->
+  <div class="pricing-head">
+    <div class="pricing-title">Simple, transparent pricing</div>
+    <div class="pricing-sub">
+      Pay only for the reports you need — or unlock unlimited AI analyses with the monthly plan.
+    </div>
+  </div>
+
+  <!-- PLANS GRID -->
+  <div class="plans-grid">
+
+    <!-- SINGLE REPORT -->
+    <div class="plan-card">
+      <div class="plan-title">Single Smart Report</div>
+      <div class="plan-desc">Perfect for buyers checking 1–3 properties.</div>
+
+      <div class="price">
+        £12.49 
+        <span class="old-price">£24.99</span>
+      </div>
+      <div class="price-small">Limited-time offer for the first 30 days</div>
+
+      <a href="paywall.html?plan=single" class="btn-buy">Buy report</a>
+
+      <div class="plan-features">
+        <div><span class="check">✓</span> Full AI photo analysis</div>
+        <div><span class="check">✓</span> EPC, crime, flood & price data</div>
+        <div><span class="check">✓</span> Negotiation suggestions</div>
+        <div><span class="check">✓</span> Instant PDF export</div>
+      </div>
+    </div>
+
+    <!-- UNLIMITED PLAN -->
+    <div class="plan-card" style="border:2px solid #22c55e;margin-top:-8px;">
+      <div class="plan-title">Unlimited Monthly</div>
+      <div class="plan-desc">Ideal for investors, agents or active buyers.</div>
+
+      <div class="price">£49.89<span class="price-small"> / month</span></div>
+
+      <a href="paywall.html?plan=unlimited" class="btn-buy">Subscribe</a>
+
+      <div class="plan-features">
+        <div><span class="check">✓</span> Unlimited AI reports</div>
+        <div><span class="check">✓</span> Priority processing</div>
+        <div><span class="check">✓</span> Photo + data deep scan</div>
+        <div><span class="check">✓</span> Access to all premium features</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FAQ SECTION -->
+  <div class="faq-title">Frequently Asked Questions</div>
+
+  <div class="faq-grid">
+
+    <div class="faq-item">
+      <div class="faq-q">Are reports really unlimited?</div>
+      <div class="faq-a">Yes — the monthly plan allows you to generate as many property reports as you want.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Do reports include photo analysis?</div>
+      <div class="faq-a">Absolutely. AI scans walls, ceilings, cracks, stains, mould patterns and structural clues.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Can I cancel the monthly plan?</div>
+      <div class="faq-a">Yes. You can stop your subscription at any time — no locking period.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Do you offer refunds?</div>
+      <div class="faq-a">If a report fails to generate due to a technical problem, a refund or credit may be issued.</div>
+    </div>
+
+  </div>
+
+</div>
+
+
+<footer>
+  © 2025 AiHousing · 
+  <a href="terms.html">Terms</a> · 
+  <a href="privacy.html">Privacy</a> · 
+  <a href="cookies.html">Cookies</a> · 
+  <a href="contact.html">Contact</a>
+</footer>
+
+</body>
+</html>

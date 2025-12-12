@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>AiHousing – Upgrade to Full Report</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <script src="https://js.stripe.com/v3/"></script>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f5f5f7;
+      color: #0f172a;
+    }
+    a { text-decoration: none; color: inherit; }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 80;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 40px;
+      backdrop-filter: blur(18px);
+      background: rgba(248,250,252,0.95);
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .logo {
+      font-size: 26px;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      position: relative;
+      color: #0f172a;
+    }
+    .logo::after {
+      content: "";
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: radial-gradient(circle, #4ade80, #16a34a);
+      right: -12px;
+      bottom: 0;
+      box-shadow: 0 0 10px rgba(34,197,94,0.8);
+    }
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 26px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    .nav a:hover { color: #22c55e; }
+    .nav a.active { color: #22c55e; font-weight: 600; }
+
+    .auth-btn {
+      padding: 9px 16px;
+      border-radius: 999px;
+      border: 1px solid #cbd5e1;
+      font-size: 13px;
+      font-weight: 600;
+      background: #ffffff;
+      color: #0f172a;
+      cursor: pointer;
+      transition: .2s;
+    }
+    .auth-btn:hover { background: #f3f4f6; }
+    .auth-btn.primary {
+      background: #22c55e;
+      border-color: #22c55e;
+      color: #fff;
+    }
+    .auth-btn.primary:hover { background: #16a34a; }
+
+    @media (max-width: 900px) {
+      header { padding: 12px 18px; }
+      .nav { gap: 16px; font-size: 13px; }
+    }
+
+    .page {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 40px 18px 80px;
+    }
+
+    .paywall-hero {
+      text-align: left;
+      margin-bottom: 28px;
+    }
+    .paywall-eyebrow {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .13em;
+      color: #64748b;
+      margin-bottom: 8px;
+    }
+    .paywall-title {
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 8px;
+    }
+    .paywall-sub {
+      font-size: 14px;
+      color: #6b7280;
+      max-width: 540px;
+    }
+    .property-line {
+      margin-top: 10px;
+      font-size: 13px;
+      color: #0f172a;
+    }
+    .property-line span {
+      font-weight: 600;
+    }
+
+    .paywall-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.1fr);
+      gap: 30px;
+      margin-top: 28px;
+      align-items: flex-start;
+    }
+    @media (max-width: 960px) {
+      .paywall-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .plans {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .plan-card {
+      background: #ffffff;
+      border-radius: 22px;
+      border: 1px solid #e2e8f0;
+      padding: 18px 18px 16px;
+      box-shadow: 0 14px 40px rgba(15,23,42,0.08);
+      cursor: pointer;
+      transition: .2s;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    .plan-card.selected {
+      border-color: #22c55e;
+      box-shadow: 0 18px 55px rgba(34,197,94,0.18);
+    }
+    .plan-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .13em;
+      color: #9ca3af;
+      margin-bottom: 5px;
+    }
+    .plan-name {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .plan-price-row {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+    .plan-price {
+      font-size: 24px;
+      font-weight: 800;
+    }
+    .plan-old-price {
+      font-size: 14px;
+      color: #9ca3af;
+      text-decoration: line-through;
+    }
+    .plan-tag {
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: #ecfdf3;
+      color: #16a34a;
+      border: 1px solid #bbf7d0;
+      margin-left: auto;
+    }
+    .plan-desc {
+      font-size: 13px;
+      color: #6b7280;
+      margin-bottom: 10px;
+    }
+    .plan-ul {
+      font-size: 13px;
+      color: #4b5563;
+      padding-left: 18px;
+      margin: 0 0 8px;
+    }
+    .plan-ul li {
+      margin-bottom: 4px;
+    }
+    .plan-radio {
+      position: absolute;
+      right: 16px;
+      top: 16px;
+      width: 16px;
+      height: 16px;
+      border-radius: 999px;
+      border: 2px solid #cbd5e1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .plan-card.selected .plan-radio {
+      border-color: #22c55e;
+    }
+    .plan-radio-inner {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #22c55e;
+      opacity: 0;
+    }
+    .plan-card.selected .plan-radio-inner {
+      opacity: 1;
+    }
+    .plan-note {
+      font-size: 12px;
+      color: #9ca3af;
+      margin-top: 6px;
+    }
+
+    .payment-box {
+      background: #ffffff;
+      border-radius: 22px;
+      border: 1px solid #e2e8f0;
+      padding: 20px 18px 18px;
+      box-shadow: 0 16px 50px rgba(15,23,42,0.08);
+      font-size: 13px;
+    }
+    .payment-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .payment-sub {
+      font-size: 13px;
+      color: #6b7280;
+      margin-bottom: 14px;
+    }
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      font-size: 13px;
+    }
+    .summary-label {
+      color: #6b7280;
+    }
+    .summary-value {
+      font-weight: 600;
+    }
+    .total-row {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px dashed #e5e7eb;
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+    }
+    .total-value {
+      font-weight: 700;
+      font-size: 18px;
+    }
+
+    .payment-btn {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 999px;
+      border: none;
+      background: #0f172a;
+      color: #ffffff;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: .2s;
+      margin-top: 16px;
+    }
+    .payment-btn:hover {
+      background: #020617;
+    }
+
+    .payment-footnote {
+      font-size: 11px;
+      color: #9ca3af;
+      margin-top: 8px;
+      line-height: 1.5;
+    }
+    .error-message {
+      color: #ef4444;
+      font-size: 13px;
+      margin-bottom: 8px;
+      display: none;
+    }
+    .ok-message {
+      color: #16a34a;
+      font-size: 13px;
+      margin-bottom: 8px;
+      display: none;
+    }
+
+    footer {
+      margin-top: 70px;
+      padding: 26px;
+      text-align: center;
+      font-size: 13px;
+      color: #9ca3af;
+      border-top: 1px solid #e5e7eb;
+      background: #f9fafb;
+    }
+    footer a {
+      margin: 0 10px;
+      color: #6b7280;
+    }
+    footer a:hover { color: #111827; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">AiHousing</div>
+  <nav class="nav">
+    <a href="index.html">Home</a>
+    <a href="sample-report.html">Sample</a>
+    <a href="pricing.html" class="active">Pricing</a>
+    <a href="help.html">Help</a>
+    <a href="login.html" class="auth-btn">Login</a>
+    <a href="register.html" class="auth-btn primary">Register</a>
+  </nav>
+</header>
+
+<div class="page">
+  <div class="paywall-hero">
+    <div class="paywall-eyebrow">Upgrade to full AI report</div>
+    <div class="paywall-title">See every risk, defect and negotiation angle.</div>
+    <div class="paywall-sub">
+      Choose a single detailed report for one property, or unlock unlimited reports every month.
+      You only pay when you're ready to see the full analysis.
+    </div>
+    <div class="property-line" id="property-line" style="display:none;">
+      For property: <span id="property-display"></span>
+    </div>
+  </div>
+
+  <div class="paywall-grid">
+    <div class="plans">
+      <div class="plan-card selected" data-plan="basic" id="plan-basic">
+        <div class="plan-radio"><div class="plan-radio-inner"></div></div>
+        <div class="plan-label">Single report</div>
+        <div class="plan-name">Full AiHousing report</div>
+        <div class="plan-price-row">
+          <div class="plan-price">£12.49</div>
+          <div class="plan-old-price">£24.99</div>
+          <div class="plan-tag">Intro offer</div>
+        </div>
+        <div class="plan-desc">Perfect if you're analysing one property in detail.</div>
+        <ul class="plan-ul">
+          <li>Full defects &amp; damp / mould analysis from photos*</li>
+          <li>EPC, crime, flood, sold-price and area stats</li>
+          <li>Negotiation bullets to copy-paste to your agent</li>
+          <li>Renovation ideas &amp; upgrade priorities</li>
+        </ul>
+        <div class="plan-note">One-time payment · No subscription.</div>
+      </div>
+
+      <div class="plan-card" data-plan="full" id="plan-full">
+        <div class="plan-radio"><div class="plan-radio-inner"></div></div>
+        <div class="plan-label">Unlimited</div>
+        <div class="plan-name">Unlimited reports</div>
+        <div class="plan-price-row">
+          <div class="plan-price">£49.89</div>
+          <div class="plan-tag">Best for active buyers</div>
+        </div>
+        <div class="plan-desc">For serious buyers, investors or sourcers checking multiple properties.</div>
+        <ul class="plan-ul">
+          <li>Unlimited reports every month</li>
+          <li>Priority processing &amp; faster AI analysis</li>
+          <li>Perfect alongside Rightmove &amp; Zoopla searches</li>
+          <li>Export PDFs for your records or clients</li>
+        </ul>
+        <div class="plan-note">Renews monthly · Cancel anytime.</div>
+      </div>
+    </div>
+
+    <div class="payment-box">
+      <div class="payment-title">Secure card payment</div>
+      <div class="payment-sub">
+        We use Stripe to process your payment securely. Your card details never touch AiHousing servers.
+      </div>
+
+      <div class="error-message" id="errorMessage"></div>
+      <div class="ok-message" id="okMessage"></div>
+
+      <div class="summary-row">
+        <div class="summary-label">Plan selected</div>
+        <div class="summary-value" id="summary-plan">Full AiHousing report</div>
+      </div>
+      <div class="summary-row">
+        <div class="summary-label">Billing</div>
+        <div class="summary-value" id="summary-billing">One-time payment</div>
+      </div>
+      <div class="total-row">
+        <div class="summary-label">Total due now</div>
+        <div class="total-value" id="summary-total">£12.49</div>
+      </div>
+
+      <button class="payment-btn" id="pay-button">Continue to secure payment</button>
+
+      <div class="payment-footnote">
+        By completing your purchase you agree to our
+        <a href="terms.html">Terms</a> and confirm you've read our
+        <a href="privacy.html">Privacy Policy</a>. VAT (if applicable) is included.
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  © 2025 AiHousing ·
+  <a href="terms.html">Terms</a>
+  <a href="privacy.html">Privacy</a>
+  <a href="cookies.html">Cookies</a>
+  <a href="contact.html">Contact</a>
+</footer>
+
+<script>
+  // CONFIG – pune aici cheia ta publică Stripe
+  const STRIPE_PUBLISHABLE_KEY = "pk_test_51SWljX2V8A3yCU41Jo1hNMvPztin3DB7pRgZxi8rlXAOsZnKD1AlchaJgCcXqGXa4QI6jfAc7lc7CLEqU8RDRJqg005woMhC2o";
+  const API_BASE = "http://localhost:8000";
+
+  const stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
+
+  let currentPlan = "basic";
+  let currentPriceText = "£12.49";
+
+  const planBasicEl = document.getElementById("plan-basic");
+  const planFullEl = document.getElementById("plan-full");
+  const summaryPlanEl = document.getElementById("summary-plan");
+  const summaryBillingEl = document.getElementById("summary-billing");
+  const summaryTotalEl = document.getElementById("summary-total");
+  const errorMessageEl = document.getElementById("errorMessage");
+  const okMessageEl = document.getElementById("okMessage");
+  const payButton = document.getElementById("pay-button");
+  const propertyLine = document.getElementById("property-line");
+  const propertyDisplay = document.getElementById("property-display");
+
+function detectPropertyInput() {
+    const params = new URLSearchParams(window.location.search);
+    let prop = params.get("property");
+
+    // Dacă nu e în URL, căutăm în localStorage
+    if (!prop) {
+        const postcode = localStorage.getItem("ai_postcode") || "";
+        const link = localStorage.getItem("ai_link") || "";
+
+        if (link) prop = link;
+        else if (postcode) prop = postcode;
+    }
+
+    if (prop && propertyLine && propertyDisplay) {
+        propertyDisplay.textContent = prop;
+        propertyLine.style.display = "block";
+    }
+
+    return prop;
+}
+
+
+
+
+  function selectPlan(plan) {
+    currentPlan = plan;
+    if (plan === "basic") {
+      planBasicEl.classList.add("selected");
+      planFullEl.classList.remove("selected");
+      currentPriceText = "£12.49";
+      summaryPlanEl.textContent = "Full AiHousing report (single)";
+      summaryBillingEl.textContent = "One-time payment";
+    } else {
+      planFullEl.classList.add("selected");
+      planBasicEl.classList.remove("selected");
+      currentPriceText = "£49.89";
+      summaryPlanEl.textContent = "Unlimited reports";
+      summaryBillingEl.textContent = "Renews monthly · Cancel anytime";
+    }
+    summaryTotalEl.textContent = currentPriceText;
+  }
+
+  planBasicEl.addEventListener("click", () => selectPlan("basic"));
+  planFullEl.addEventListener("click", () => selectPlan("full"));
+
+  payButton.addEventListener("click", async () => {
+  errorMessageEl.style.display = "none";
+  okMessageEl.style.display = "none";
+
+  const propertyInput = detectPropertyInput();
+
+  if (!propertyInput) {
+    errorMessageEl.textContent = "We couldn’t detect your property details. Please start again from the home page.";
+    errorMessageEl.style.display = "block";
+    return;
+  }
+
+  payButton.disabled = true;
+  payButton.textContent = "Creating secure checkout…";
+
+  try {
+    const body = {
+      plan: currentPlan === "basic" ? "basic" : "full",
+      property_input: propertyInput,
+      email: null
+    };
+
+    const response = await fetch(`${API_BASE}/start-report`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body)
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.detail || "Unknown error from server");
+    }
+
+    if (!data.session_url) {
+      throw new Error("Server did not return Stripe session URL.");
+    }
+
+    // 🔥 DIRECT REDIRECT TO STRIPE
+    window.location.href = data.session_url;
+
+  } catch (err) {
+    console.error(err);
+    errorMessageEl.textContent = "There was a problem starting your payment: " + err.message;
+    errorMessageEl.style.display = "block";
+    payButton.disabled = false;
+    payButton.textContent = "Continue to secure payment";
+  }
+});
+
+
+  // init
+  detectPropertyInput();
+  selectPlan("basic");
+</script>
+
+
+</body>
+</html>

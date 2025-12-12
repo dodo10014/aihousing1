@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Privacy Policy – AiHousing</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Learn how AiHousing collects, uses and protects your data when generating AI-powered UK property reports.">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f5f5f7;
+      color: #0f172a;
+    }
+    a { text-decoration: none; color: inherit; }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 80;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 40px;
+      backdrop-filter: blur(18px);
+      background: rgba(248,250,252,0.95);
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .logo {
+      font-size: 26px;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      position: relative;
+      color: #0f172a;
+    }
+    .logo::after {
+      content: "";
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: radial-gradient(circle, #4ade80, #16a34a);
+      right: -12px;
+      bottom: 0;
+      box-shadow: 0 0 10px rgba(34,197,94,0.8);
+    }
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 26px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    .nav a:hover { color: #22c55e; }
+
+    .dropdown { position: relative; cursor: pointer; }
+    .dropdown-menu {
+      position: absolute;
+      right: 0;
+      top: 30px;
+      min-width: 180px;
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      box-shadow: 0 18px 40px rgba(15,23,42,0.16);
+      padding: 8px 0;
+      display: none;
+      z-index: 100;
+    }
+    .dropdown-menu a {
+      display: block;
+      padding: 10px 14px;
+      font-size: 14px;
+    }
+    .dropdown-menu a:hover { background: #f3f4f6; }
+
+    .auth-btn {
+      padding: 9px 16px;
+      border-radius: 999px;
+      border: 1px solid #cbd5e1;
+      font-size: 13px;
+      font-weight: 600;
+      background: #ffffff;
+      color: #0f172a;
+      cursor: pointer;
+      transition: .2s;
+    }
+    .auth-btn:hover { background: #f3f4f6; }
+    .auth-btn.primary {
+      background: #22c55e;
+      border-color: #22c55e;
+      color: #fff;
+    }
+    .auth-btn.primary:hover { background: #16a34a; }
+
+    @media (max-width: 900px) {
+      header { padding: 12px 18px; }
+      .nav { gap: 16px; font-size: 13px; }
+    }
+
+    .page {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 36px 18px 70px;
+    }
+
+    .page-title {
+      font-size: 30px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 6px;
+    }
+    .page-sub {
+      font-size: 14px;
+      color: #6b7280;
+      margin-bottom: 24px;
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-top: 26px;
+      margin-bottom: 8px;
+    }
+    .section-text {
+      font-size: 14px;
+      color: #4b5563;
+      line-height: 1.7;
+    }
+    .section-text ul {
+      padding-left: 20px;
+      margin-top: 6px;
+      margin-bottom: 6px;
+    }
+    .section-text li {
+      margin-bottom: 4px;
+    }
+
+    footer {
+      margin-top: 40px;
+      padding: 26px;
+      text-align: center;
+      font-size: 13px;
+      color: #9ca3af;
+      border-top: 1px solid #e5e7eb;
+      background: #f9fafb;
+    }
+    footer a {
+      margin: 0 10px;
+      color: #6b7280;
+    }
+    footer a:hover { color: #111827; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">AiHousing</div>
+
+  <nav class="nav">
+    <a href="index.html">Home</a>
+    <a href="sample-report.html">Sample</a>
+    <a href="pricing.html">Pricing</a>
+
+    <div class="dropdown">
+      <span class="dropdown-btn">Help ▾</span>
+      <div class="dropdown-menu" id="helpMenu">
+        <a href="help.html">Help centre</a>
+        <a href="terms.html">Terms &amp; Conditions</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="cookies.html">Cookies</a>
+        <a href="contact.html">Contact</a>
+      </div>
+    </div>
+
+    <a href="login.html" class="auth-btn">Login</a>
+    <a href="register.html" class="auth-btn primary">Register</a>
+  </nav>
+</header>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const btn = document.querySelector(".dropdown-btn");
+    const menu = document.getElementById("helpMenu");
+    if (btn) {
+      btn.addEventListener("click", () => {
+        menu.style.display = menu.style.display === "block" ? "none" : "block";
+      });
+    }
+  });
+</script>
+
+<div class="page">
+  <div class="page-title">Privacy Policy</div>
+  <div class="page-sub">
+    This Privacy Policy explains how AiHousing collects, uses and protects your information
+    when you use our website and AI-powered property report services.
+  </div>
+
+  <div class="section-title">1. Who we are</div>
+  <div class="section-text">
+    AiHousing provides AI-assisted property insights for UK buyers, renters and investors.
+    When we say “we”, “us” or “AiHousing” in this policy, we are referring to the AiHousing service
+    and website located at <strong>aihousing.uk</strong>.
+  </div>
+
+  <div class="section-title">2. What information we collect</div>
+  <div class="section-text">
+    We may collect:
+    <ul>
+      <li>Contact details such as your email address when you contact us or create an account.</li>
+      <li>Property details such as postcodes, addresses or listing links you enter.</li>
+      <li>Photos you upload for analysis by our AI models.</li>
+      <li>Technical data such as IP address, device type and browser information.</li>
+      <li>Usage data such as pages visited, features used and the time spent on our site.</li>
+    </ul>
+  </div>
+
+  <div class="section-title">3. How we use your information</div>
+  <div class="section-text">
+    We use your information to:
+    <ul>
+      <li>Generate property reports based on your inputs and uploaded photos.</li>
+      <li>Improve the accuracy and performance of our AI models.</li>
+      <li>Operate, maintain and secure our website and services.</li>
+      <li>Respond to your questions and provide support.</li>
+      <li>Comply with legal obligations and prevent fraud or abuse.</li>
+    </ul>
+  </div>
+
+  <div class="section-title">4. Photos and property data</div>
+  <div class="section-text">
+    <ul>
+      <li>Your photos are processed to generate a report and may be stored for a limited period for quality checks and to improve our models.</li>
+      <li>We do not publish your photos or property reports publicly.</li>
+      <li>We may aggregate and anonymise data (for example, statistics across many properties) for analytics and product improvement.</li>
+    </ul>
+  </div>
+
+  <div class="section-title">5. Legal basis for processing (UK &amp; EU GDPR)</div>
+  <div class="section-text">
+    We process your personal data based on:
+    <ul>
+      <li><strong>Contract:</strong> to provide the property report service you request.</li>
+      <li><strong>Legitimate interests:</strong> to improve our service, prevent abuse and understand how our platform is used.</li>
+      <li><strong>Consent:</strong> where required, for analytics cookies or marketing communications.</li>
+    </ul>
+  </div>
+
+  <div class="section-title">6. Data sharing</div>
+  <div class="section-text">
+    We may share data with:
+    <ul>
+      <li>Service providers such as hosting, analytics or payment partners (for example, Stripe).</li>
+      <li>Professional advisers (legal, accounting) where necessary.</li>
+      <li>Authorities, where required by law or to protect our rights or users.</li>
+    </ul>
+    We do not sell your personal data.
+  </div>
+
+  <div class="section-title">7. International transfers</div>
+  <div class="section-text">
+    Some of our service providers may be located outside the UK/EEA. Where this happens,
+    we take steps to ensure your data is protected, for example by using standard contractual clauses
+    or ensuring the provider offers adequate protection.
+  </div>
+
+  <div class="section-title">8. Data retention</div>
+  <div class="section-text">
+    We keep your data only for as long as necessary:
+    <ul>
+      <li>Account and report data – while your account is active and for a reasonable period afterwards.</li>
+      <li>Photos – typically for a limited period after report generation, unless you ask us to delete them sooner.</li>
+      <li>Invoices and transaction records – as required by tax and accounting laws.</li>
+    </ul>
+  </div>
+
+  <div class="section-title">9. Your rights</div>
+  <div class="section-text">
+    Under data protection laws, you may have the right to:
+    <ul>
+      <li>Access the personal data we hold about you.</li>
+      <li>Request correction of inaccurate data.</li>
+      <li>Request deletion of your data, where applicable.</li>
+      <li>Object to certain types of processing.</li>
+      <li>Ask us to restrict processing in some circumstances.</li>
+      <li>Request a copy of your data in a portable format.</li>
+    </ul>
+    You can exercise these rights by contacting us using the details below.
+  </div>
+
+  <div class="section-title">10. Cookies and analytics</div>
+  <div class="section-text">
+    We use cookies and similar technologies to:
+    <ul>
+      <li>Keep the site secure and functioning properly.</li>
+      <li>Understand how the site is used (analytics).</li>
+      <li>Remember your choices or logged-in status.</li>
+    </ul>
+    You can control cookies via your browser settings and our cookie banner.
+    For more details, please see our <a href="cookies.html">Cookie Policy</a>.
+  </div>
+
+  <div class="section-title">11. Payments</div>
+  <div class="section-text">
+    Payments for AiHousing reports are processed by third-party provider Stripe.
+    We do not store your full card details on our own servers. Stripe processes
+    your payment data as an independent controller in accordance with its own privacy policy.
+  </div>
+
+  <div class="section-title">12. Contact</div>
+  <div class="section-text">
+    If you have any questions about this policy or how we handle your data, you can contact us at:<br><br>
+    <strong>Email:</strong> support@aihousing.uk
+  </div>
+
+  <div class="section-title">13. Changes to this policy</div>
+  <div class="section-text">
+    We may update this Privacy Policy from time to time to reflect changes in our service or the law.
+    The latest version will always be available on this page, with an updated “last updated” date.
+  </div>
+
+</div>
+
+<footer>
+  © 2025 AiHousing ·
+  <a href="terms.html">Terms</a>
+  <a href="privacy.html">Privacy</a>
+  <a href="cookies.html">Cookies</a>
+  <a href="contact.html">Contact</a>
+</footer>
+
+</body>
+</html>

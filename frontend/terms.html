@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Terms & Conditions – AiHousing</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ---------------------------------------
+   GLOBAL HEADER (WHITE – LIKE INDEX)
+---------------------------------------- */
+header {
+  width: 100%;
+  padding: 18px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: white;
+  border-bottom: 1px solid #e5e7eb;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+}
+
+.logo-link {
+  color: #0f172a;
+  text-decoration: none;
+  font-weight: 900;
+  font-size: 28px;
+  letter-spacing: -0.04em;
+  position: relative;
+}
+
+.logo-dot {
+  width: 10px;
+  height: 10px;
+  background: #22c55e;
+  display: inline-block;
+  border-radius: 50%;
+  margin-left: 4px;
+  position: absolute;
+  bottom: 5px;
+  box-shadow: 0 0 10px #22c55e;
+}
+
+.main-nav {
+  display: flex;
+  align-items: center;
+  gap: 26px;
+}
+
+.main-nav a {
+  color: #0f172a;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 15px;
+  transition: 0.2s;
+}
+
+.main-nav a:hover {
+  opacity: 0.7;
+}
+
+.register-btn {
+  background: #2563eb;
+  padding: 8px 16px;
+  border-radius: 10px;
+  color: white !important;
+  font-weight: 600;
+}
+
+/* Dropdown */
+.dropdown {
+  position: relative;
+}
+
+.dropbtn {
+  background: transparent;
+  border: none;
+  font-size: 15px;
+  cursor: pointer;
+  font-weight: 500;
+  color: #0f172a;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: white;
+  min-width: 180px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  padding: 10px 0;
+  border: 1px solid #e5e7eb;
+}
+
+.dropdown-content a {
+  display: block;
+  padding: 10px 18px;
+  color: #0f172a;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.dropdown-content a:hover {
+  background: #f3f4f6;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+/* ---------------------------------------
+   PAGE CONTENT
+---------------------------------------- */
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: #f9fafb;
+  color: #0f172a;
+}
+
+.page {
+  max-width: 900px;
+  margin: 40px auto;
+  background: white;
+  padding: 40px;
+  border-radius: 20px;
+  border: 1px solid #e5e7eb;
+}
+
+h1 {
+  font-size: 36px;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+
+h2 {
+  margin-top: 32px;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+p, li {
+  font-size: 15px;
+  line-height: 1.7;
+  color: #374151;
+}
+
+ul {
+  margin-left: 20px;
+}
+
+/* ---------------------------------------
+   FOOTER (WHITE LIKE INDEX)
+---------------------------------------- */
+
+footer {
+  width: 100%;
+  background: white;
+  border-top: 1px solid #e5e7eb;
+  text-align: center;
+  padding: 26px;
+  margin-top: 60px;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+footer a {
+  color: #0f172a;
+  text-decoration: none;
+  margin: 0 6px;
+}
+
+footer a:hover {
+  opacity: 0.6;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header>
+  <a href="index.html" class="logo-link">
+    AiHousing <span class="logo-dot"></span>
+  </a>
+
+  <nav class="main-nav">
+    <a href="index.html">Home</a>
+    <a href="sample-report.html">Sample</a>
+    <a href="pricing.html">Pricing</a>
+
+    <div class="dropdown">
+      <button class="dropbtn">Help ▾</button>
+      <div class="dropdown-content">
+        <a href="terms.html">Terms & Conditions</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="cookies.html">Cookies Policy</a>
+        <a href="contact.html">Contact</a>
+      </div>
+    </div>
+
+    <a href="login.html">Login</a>
+    <a class="register-btn" href="register.html">Register</a>
+  </nav>
+</header>
+
+
+
+<!-- CONTENT -->
+<div class="page">
+<h1>Terms & Conditions</h1>
+<p>Last updated: 2025</p>
+
+<p>Welcome to AiHousing (“we”, “our”, “us”). These Terms & Conditions (“Terms”) govern your use of our website, platform, and AI-based property report services.  
+By accessing or using AiHousing, you confirm that you have read, understood, and agreed to these Terms.</p>
+
+<h2>1. About AiHousing</h2>
+<p>AiHousing is a UK-based digital platform that provides AI-powered property insight reports.  
+These reports are generated using:</p>
+<ul>
+  <li>computer vision analysis of user-uploaded photos,</li>
+  <li>publicly available UK datasets (EPC, flood, crime, sold prices),</li>
+  <li>user-provided postcodes, addresses or property links,</li>
+  <li>statistical models trained on anonymised property information.</li>
+</ul>
+
+<p>AiHousing does NOT provide:</p>
+<ul>
+  <li>RICS surveys,</li>
+  <li>legal, financial, or structural advice,</li>
+  <li>official property valuations,</li>
+  <li>guarantees regarding property condition, pricing or future performance.</li>
+</ul>
+
+<h2>2. Eligibility</h2>
+<p>You must be at least 18 years old to use our services, create an account, or purchase any paid report or subscription.</p>
+
+<h2>3. User Responsibilities</h2>
+<p>By using AiHousing, you agree that:</p>
+<ul>
+  <li>You are responsible for the accuracy of the information you submit.</li>
+  <li>You will not upload copyrighted or unlawful photos unless you own them or have permission to upload them.</li>
+  <li>You will not attempt to reverse-engineer, copy, clone or resell our reports or platform.</li>
+  <li>You will not use AiHousing for illegal, harmful, or abusive purposes.</li>
+</ul>
+
+<h2>4. Use of Listing Images (Rightmove, Zoopla, etc.)</h2>
+<p>AiHousing does <strong>NOT</strong> store, redistribute, or reproduce copyrighted listing photos from Rightmove, Zoopla, OnTheMarket, or any property portal.</p>
+
+<p>If you upload photos manually, you confirm that:</p>
+<ul>
+  <li>You have the right to use those images, OR</li>
+  <li>You are uploading them under “fair use” for private analysis only.</li>
+</ul>
+
+<p>AiHousing analyses images temporarily for AI processing, then stores only the minimum required for the delivery of your report.</p>
+
+<h2>5. Nature of AI Reports</h2>
+<p>Our reports are automatically generated by artificial intelligence.  
+While we strive for accuracy, you acknowledge that:</p>
+<ul>
+  <li>AI predictions may be probabilistic, not factual,</li>
+  <li>property photos may hide defects or misrepresent reality,</li>
+  <li>public datasets may contain outdated or incomplete information,</li>
+  <li>interpretation of risk levels is subjective.</li>
+</ul>
+
+<p>Your report is an <strong>informational tool only</strong>.  
+It is NOT guaranteed to be complete, accurate or suitable for any specific decision.</p>
+
+<h2>6. Payments, Plans and Subscriptions</h2>
+<p>AiHousing offers:</p>
+<ul>
+  <li><strong>One-time paid reports</strong> (single property): £24.99 (discounted to £12.49 for new users for the first 30 days).</li>
+  <li><strong>Unlimited Monthly Plan</strong>: £49.89/month — unlimited reports while subscription is active.</li>
+</ul>
+
+<p>Payments are processed securely by <strong>Stripe</strong>.  
+AiHousing does NOT store your card information.</p>
+
+<h2>7. Refund Policy (UK Consumer Rights Act 2015)</h2>
+<p>Digital products delivered instantly are normally <strong>non-refundable</strong> once the report is generated.</p>
+
+<p>However, we offer refunds in the following cases:</p>
+<ul>
+  <li>The report failed to generate due to a system error.</li>
+  <li>You were charged multiple times for the same report.</li>
+  <li>A subscription was renewed accidentally and the report was NOT used after renewal.</li>
+  <li>Your report contained missing sections caused by a technical malfunction.</li>
+</ul>
+
+<p>Refunds are NOT offered for:</p>
+<ul>
+  <li>Disliking the output style or AI interpretation.</li>
+  <li>Incorrect or misleading photos submitted by the user.</li>
+  <li>Situations where public datasets differ from real-life conditions.</li>
+  <li>Reports generated and viewed already by the user.</li>
+</ul>
+
+<p>To request a refund:  
+<strong>support@aihousing.uk</strong></p>
+
+<h2>8. Subscription Cancellation</h2>
+<p>You may cancel your subscription at any time.  
+Access remains active until the end of the current billing cycle.</p>
+
+<p>No partial refunds are issued for unused days unless required by UK law.</p>
+
+<h2>9. Service Availability</h2>
+<p>We aim for near-constant uptime but do not guarantee uninterrupted access.</p>
+<p>The platform may be unavailable due to:</p>
+<ul>
+  <li>maintenance,</li>
+  <li>server issues,</li>
+  <li>third-party outages (Stripe, hosting, data providers),</li>
+  <li>AI model updates or failures.</li>
+</ul>
+
+<h2>10. Limitation of Liability</h2>
+<p>To the maximum extent permitted by UK law, AiHousing is NOT liable for:</p>
+<ul>
+  <li>financial loss related to buying/selling/renting property,</li>
+  <li>defects not detected by the AI system,</li>
+  <li>damage resulting from relying solely on our report,</li>
+  <li>loss of data, profits, or opportunities.</li>
+</ul>
+
+<p>Your sole remedy for dissatisfaction is to stop using AiHousing.</p>
+
+<h2>11. Intellectual Property</h2>
+<p>All AiHousing branding, UI, design elements, code, text, and report layout are protected under UK intellectual property law.</p>
+
+<p>You may NOT:</p>
+<ul>
+  <li>copy or republish our reports,</li>
+  <li>use them commercially,</li>
+  <li>train AI models on our content,</li>
+  <li>scrape or extract structured data.</li>
+</ul>
+
+<h2>12. Data Protection & UK GDPR</h2>
+<p>Your data is governed by our <a href="privacy.html">Privacy Policy</a> and complies with:</p>
+<ul>
+  <li>UK GDPR (2021)</li>
+  <li>Data Protection Act 2018</li>
+  <li>ICO guidelines</li>
+</ul>
+
+<h2>13. Account Termination</h2>
+<p>We may suspend or terminate accounts for:</p>
+<ul>
+  <li>fraudulent activity,</li>
+  <li>misuse of photos,</li>
+  <li>abusive behaviour,</li>
+  <li>violations of these Terms.</li>
+</ul>
+
+<h2>14. Governing Law</h2>
+<p>These Terms are governed by the laws of England & Wales.</p>
+
+<h2>15. Changes to Terms</h2>
+<p>AiHousing may update these Terms when necessary.  
+Updates will always be posted on this page.</p>
+
+
+
+</div>
+
+
+
+<!-- FOOTER -->
+<footer>
+  © 2025 AiHousing · 
+  <a href="terms.html">Terms</a> · 
+  <a href="privacy.html">Privacy</a> · 
+  <a href="cookies.html">Cookies</a> · 
+  <a href="contact.html">Contact</a>
+</footer>
+
+</body>
+</html>

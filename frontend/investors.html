@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Investors – AiHousing</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Inter", sans-serif;
+      background: #f3f4f6;
+      color: #0f172a;
+    }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 99;
+      background: #ffffffee;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 16px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      backdrop-filter: blur(12px);
+    }
+    .logo-wrap {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      display: flex;
+      align-items: center;
+      color: #0f172a;
+    }
+    .logo-dot {
+      width: 9px;
+      height: 9px;
+      background: #22c55e;
+      border-radius: 50%;
+      margin-left: 4px;
+      margin-bottom: -2px;
+      box-shadow: 0 0 8px #22c55e;
+    }
+    nav {
+      display: flex;
+      gap: 24px;
+      font-size: 15px;
+      font-weight: 500;
+    }
+    nav a {
+      color: #0f172a;
+      text-decoration: none;
+      transition: .2s;
+    }
+    nav a:hover { color: #22c55e; }
+    nav a.active { color: #22c55e; font-weight: 700; }
+
+    .page {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 40px 20px 80px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0,1.4fr) minmax(0,1fr);
+      gap: 28px;
+      margin-bottom: 40px;
+    }
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; }
+    }
+
+    .hero-title {
+      font-size: 40px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 12px;
+    }
+    .hero-sub {
+      font-size: 16px;
+      color: #64748b;
+      margin-bottom: 16px;
+    }
+    .hero-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .hero-badge {
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: #e0f2fe;
+      color: #0369a1;
+      font-size: 12px;
+      border: 1px solid #bae6fd;
+    }
+    .hero-card {
+      background: #ffffff;
+      border-radius: 22px;
+      border: 1px solid #e5e7eb;
+      padding: 22px;
+      box-shadow: 0 16px 50px rgba(15,23,42,0.08);
+      font-size: 14px;
+      color: #4b5563;
+    }
+    .hero-metric {
+      font-size: 13px;
+      color: #6b7280;
+      margin-top: 10px;
+    }
+
+    .section-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin: 30px 0 6px;
+    }
+    .section-sub {
+      font-size: 14px;
+      color: #6b7280;
+      margin-bottom: 16px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(260px,1fr));
+      gap: 18px;
+    }
+    .card {
+      background: #ffffff;
+      border-radius: 18px;
+      border: 1px solid #e5e7eb;
+      padding: 18px 20px 16px;
+      box-shadow: 0 10px 30px rgba(15,23,42,0.06);
+      font-size: 14px;
+      color: #374151;
+    }
+    .card h3 {
+      margin: 0 0 6px;
+      font-size: 16px;
+      font-weight: 600;
+    }
+    .pill-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: #9ca3af;
+      margin-bottom: 4px;
+    }
+    ul {
+      padding-left: 18px;
+      margin: 6px 0 0;
+      color: #4b5563;
+      font-size: 14px;
+    }
+    li { margin-bottom: 4px; }
+
+    .cta-card {
+      margin-top: 32px;
+      background: linear-gradient(135deg,#0f172a,#111827);
+      color: #e5e7eb;
+      border-radius: 22px;
+      padding: 22px 24px 20px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+    .cta-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .btn-primary {
+      background: #22c55e;
+      color: #ffffff;
+      border-radius: 999px;
+      padding: 10px 18px;
+      border: none;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn-primary:hover { background:#16a34a; }
+
+    footer {
+      margin-top: 80px;
+      background: #ffffff;
+      border-top: 1px solid #e5e7eb;
+      padding: 30px;
+      text-align: center;
+      color: #6b7280;
+      font-size: 14px;
+    }
+    footer a {
+      margin: 0 10px;
+      color: #0f172a;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    footer a:hover { color:#22c55e; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo-wrap">
+    AiHousing<div class="logo-dot"></div>
+  </div>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="sample-report.html">Sample</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="investors.html" class="active">Investors</a>
+    <a href="blog.html">Blog</a>
+    <a href="help.html">Help</a>
+    <a href="login.html">Login</a>
+  </nav>
+</header>
+
+<div class="page">
+  <section class="hero">
+    <div>
+      <div class="hero-title">AiHousing for investors & landlords</div>
+      <div class="hero-sub">
+        Rapid due diligence on any UK property: defects, area risk, rental yield and negotiation
+        angles – in under 60 seconds per address.
+      </div>
+      <div class="hero-badges">
+        <div class="hero-badge">Portfolio buyers</div>
+        <div class="hero-badge">Buy-to-let investors</div>
+        <div class="hero-badge">Deal sourcers</div>
+        <div class="hero-badge">Agents & advisors</div>
+      </div>
+      <p style="font-size:14px;color:#4b5563;">
+        Upload listing links and viewing photos, and AiHousing returns investor-grade insights:
+        rental estimates, gross yield, renovation budgets and area risk – all in one clean report.
+      </p>
+    </div>
+
+    <div class="hero-card">
+      <div class="pill-label">Example investor snapshot</div>
+      <p style="margin:0 0 6px;font-weight:600;">E14 5AB · 3-bed terrace</p>
+      <p style="margin:0 0 8px;font-size:13px;color:#6b7280;">
+        Asking: £435,000 · AI value range: £420k–£430k
+      </p>
+      <p style="margin:0 0 6px;font-size:13px;">
+        Estimated rent: <strong>£1,900 – £2,100 / month</strong><br>
+        Gross yield: <strong>5.0% – 5.8%</strong> (depending on final purchase price)
+      </p>
+      <p class="hero-metric">
+        3–5 key negotiation bullets · damp / cracks flagged · EPC, crime, flood & schools included.
+      </p>
+    </div>
+  </section>
+
+  <h2 class="section-title">What investors get from each report</h2>
+  <p class="section-sub">
+    AiHousing is built so you can screen more deals, faster – without missing hidden issues.
+  </p>
+
+  <div class="grid">
+    <div class="card">
+      <div class="pill-label">Deal analysis</div>
+      <h3>Value & yield in seconds</h3>
+      <ul>
+        <li>AI value range vs asking price</li>
+        <li>Estimated monthly rent and gross yield</li>
+        <li>Comparable sales on the same street and nearby</li>
+        <li>Price history for the subject property</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="pill-label">Condition</div>
+      <h3>Defects from photos</h3>
+      <ul>
+        <li>Damp, mould and condensation patterns</li>
+        <li>Cracks, settlement signs and tired finishes</li>
+        <li>Rooms likely needing upgrade in 3–5 years</li>
+        <li>Negotiation notes based on visible issues</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="pill-label">Area risk</div>
+      <h3>Location, risk & demand</h3>
+      <ul>
+        <li>Crime level, flood zone, EPC distribution</li>
+        <li>Schools (Ofsted), transport & amenities</li>
+        <li>Rental demand indicators and void-risk hints</li>
+        <li>Noise & environment context</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2 class="section-title">Unlimited reports for active buyers</h2>
+  <p class="section-sub">
+    Use AiHousing alongside Rightmove and Zoopla to triage dozens of properties before viewings.
+  </p>
+
+  <div class="grid">
+    <div class="card">
+      <div class="pill-label">For portfolio builders</div>
+      <h3>Screen 50–100 deals per month</h3>
+      <p>
+        Drop in listing links and photos to quickly spot which properties deserve a viewing,
+        a survey or an offer – and which to ignore.
+      </p>
+    </div>
+    <div class="card">
+      <div class="pill-label">For sourcing & packaging</div>
+      <h3>Attach reports to your deals</h3>
+      <p>
+        Create branded AiHousing reports to send to your clients, showing defects, data
+        and numbers in a clear, investor-friendly way.
+      </p>
+    </div>
+    <div class="card">
+      <div class="pill-label">For landlords</div>
+      <h3>Compare possible next purchases</h3>
+      <p>
+        Run the same analysis on every potential property and compare yield, risk and upgrade
+        needs side by side.
+      </p>
+    </div>
+  </div>
+
+  <div class="cta-card">
+    <div>
+      <div class="cta-title">Want bulk or white-label access?</div>
+      <div style="font-size:14px;color:#cbd5f5;">
+        Contact us for portfolio, agency or sourcing-partner pricing.  
+        We can provide higher usage limits, priority processing and custom branding.
+      </div>
+    </div>
+    <a href="mailto:support@aihousing.uk" class="btn-primary">Contact investor support</a>
+  </div>
+</div>
+
+<footer>
+  © 2025 AiHousing ·
+  <a href="terms.html">Terms</a> ·
+  <a href="privacy.html">Privacy</a> ·
+  <a href="cookies.html">Cookies</a> ·
+  <a href="contact.html">Contact</a>
+</footer>
+
+</body>
+</html>

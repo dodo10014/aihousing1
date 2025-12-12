@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>AiHousing – AI Property Reports for the UK</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ================= AI SCAN OVERLAY ================= */
+    .ai-loading-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15,23,42,0.72);
+      backdrop-filter: blur(10px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+    .ai-loading-card {
+      background: radial-gradient(circle at top,#0f172a,#020617);
+      border-radius: 24px;
+      padding: 26px;
+      max-width: 420px;
+      width: 90%;
+      border: 1px solid rgba(148,163,184,0.6);
+      box-shadow: 0 25px 80px rgba(0,0,0,0.7);
+      color: #e5e7eb;
+      font-size: 14px;
+    }
+    .ai-loading-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .ai-loading-title {
+      font-size: 16px;
+      font-weight: 600;
+    }
+    .ai-loading-pill {
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(34,197,94,0.15);
+      color: #4ade80;
+      border: 1px solid rgba(74,222,128,0.4);
+    }
+    .ai-loading-preview {
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      height: 140px;
+      margin-bottom: 14px;
+      background: linear-gradient(135deg,#111827,#1f2937);
+    }
+    .ai-scan-line {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #4ade80, transparent);
+      box-shadow: 0 0 16px rgba(34,197,94,0.9);
+      animation: scanMove 2.4s linear infinite;
+    }
+    .ai-scan-pulse {
+      position: absolute;
+      inset: 16px;
+      border-radius: 16px;
+      border: 1px dashed rgba(148,163,184,0.5);
+      animation: pulse 2.2s ease-out infinite;
+    }
+    @keyframes scanMove {
+      0% { top: 0%; }
+      50% { top: 100%; }
+      100% { top: 0%; }
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(34,197,94,0.25); }
+      70% { box-shadow: 0 0 0 22px rgba(34,197,94,0); }
+      100% { box-shadow: 0 0 0 0 rgba(34,197,94,0); }
+    }
+    .ai-loading-steps { margin-bottom: 10px; }
+    .ai-step {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 4px;
+      opacity: 0.55;
+    }
+    .ai-step-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: #4b5563;
+    }
+    .ai-step.active { opacity: 1; }
+    .ai-step.active .ai-step-dot {
+      background: #22c55e;
+      box-shadow: 0 0 8px #22c55e;
+    }
+    .ai-loading-footer {
+      font-size: 11px;
+      color: #9ca3af;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .ai-loading-spinner {
+      width: 14px;
+      height: 14px;
+      border-radius: 999px;
+      border: 2px solid rgba(148,163,184,0.4);
+      border-top-color: #22c55e;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ================= GLOBAL ================= */
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f5f5f7;
+      color: #0f172a;
+      overflow-x: hidden;
+    }
+    a { text-decoration: none; color: inherit; }
+
+    /* ================= HEADER ================= */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 80;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 40px;
+      backdrop-filter: blur(18px);
+      background: rgba(248,250,252,0.9);
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .logo {
+      font-size: 26px;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      position: relative;
+      color: #0f172a;
+    }
+    .logo::after {
+      content: "";
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: radial-gradient(circle, #4ade80, #16a34a);
+      right: -12px;
+      bottom: 0;
+      box-shadow: 0 0 10px rgba(34,197,94,0.8);
+    }
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 26px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    .nav a:hover { color: #22c55e; }
+    .dropdown { position: relative; cursor: pointer; }
+    .dropdown-menu {
+      position: absolute;
+      right: 0;
+      top: 30px;
+      min-width: 180px;
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      box-shadow: 0 18px 40px rgba(15,23,42,0.16);
+      padding: 8px 0;
+      display: none;
+      z-index: 100;
+    }
+    .dropdown-menu a {
+      display: block;
+      padding: 10px 14px;
+      font-size: 14px;
+    }
+    .dropdown-menu a:hover { background: #f3f4f6; }
+
+    .auth-btn {
+      padding: 9px 16px;
+      border-radius: 999px;
+      border: 1px solid #cbd5e1;
+      font-size: 13px;
+      font-weight: 600;
+      background: #ffffff;
+      color: #0f172a;
+      cursor: pointer;
+      transition: .2s;
+    }
+    .auth-btn:hover { background: #f3f4f6; }
+    .auth-btn.primary {
+      background: #22c55e;
+      border-color: #22c55e;
+      color: #fff;
+    }
+    .auth-btn.primary:hover { background: #16a34a; }
+
+    @media (max-width: 900px) {
+      header { padding: 12px 18px; }
+      .nav { gap: 16px; }
+    }
+
+    /* ================= HERO ================= */
+    .hero {
+      position: relative;
+      height: 520px;
+      background: url("hero-aihousing.jpg") center/cover no-repeat;
+      color: #fff;
+    }
+    .hero.fallback {
+      background: radial-gradient(circle at top, #1e293b 0, #020617 55%, #0b1120 100%);
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom right, rgba(15,23,42,0.5), rgba(15,23,42,0.75));
+    }
+    .hero-inner {
+      position: relative;
+      z-index: 2;
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 60px 24px 40px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+      gap: 34px;
+      align-items: center;
+    }
+    @media (max-width: 960px) {
+      .hero-inner {
+        grid-template-columns: 1fr;
+        padding-top: 40px;
+        padding-bottom: 30px;
+        height: auto;
+      }
+    }
+    .hero-left h1 {
+      font-size: 46px;
+      line-height: 1.05;
+      letter-spacing: -0.05em;
+      margin: 0 0 14px;
+      font-weight: 900;
+    }
+    .hero-left p {
+      font-size: 15px;
+      max-width: 420px;
+      color: rgba(241,245,249,0.9);
+      margin-bottom: 18px;
+    }
+    .hero-badges {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 14px;
+      margin-bottom: 18px;
+    }
+    .hero-badges span {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .hero-badges span .dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 999px;
+      background: rgba(15,23,42,0.9);
+      border: 1px solid rgba(148,163,184,0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+    }
+
+    .hero-input-card {
+      margin-top: 22px;
+      max-width: 380px;
+      background: rgba(248,250,252,0.98);
+      border-radius: 18px;
+      padding: 14px 14px 16px;
+      box-shadow: 0 25px 60px rgba(15,23,42,0.35);
+      color: #0f172a;
+    }
+    .hero-input-card input[type="text"] {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid #d1d5db;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+    .hero-upload-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 4px;
+      margin-bottom: 10px;
+    }
+    .hero-upload-pill {
+      flex: 1;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px dashed #cbd5e1;
+      background: #f1f5f9;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .hero-upload-pill input {
+      display: none;
+    }
+    .hero-cta {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 999px;
+      border: none;
+      font-size: 15px;
+      font-weight: 700;
+      background: #2563eb;
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 10px 30px rgba(37,99,235,0.6);
+      transition: .2s;
+    }
+    .hero-cta:hover { background: #1d4ed8; }
+
+    .hero-right { justify-self: end; }
+    .live-card {
+      max-width: 360px;
+      background: rgba(15,23,42,0.94);
+      border-radius: 26px;
+      padding: 20px 18px 18px;
+      color: #e5e7eb;
+      box-shadow: 0 28px 70px rgba(0,0,0,0.75);
+      border: 1px solid rgba(148,163,184,0.4);
+      font-size: 13px;
+    }
+    .live-card h3 {
+      font-size: 16px;
+      margin: 0 0 4px;
+      font-weight: 700;
+    }
+    .live-row { margin: 6px 0; }
+    .live-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .09em;
+      color: #94a3b8;
+    }
+    .live-score {
+      font-size: 24px;
+      font-weight: 800;
+      color: #4ade80;
+      margin-top: 4px;
+    }
+    .live-divider {
+      border-top: 1px solid rgba(148,163,184,0.4);
+      margin: 10px 0;
+    }
+    @media (max-width: 960px) {
+      .hero-right { justify-self: flex-start; }
+      .live-card { margin-top: 10px; }
+    }
+
+    /* ================= MAIN PAGE ================= */
+    .page {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 40px 18px 80px;
+    }
+
+    .top-features {
+      display: grid;
+      grid-template-columns: minmax(0,1.1fr) minmax(0,1.1fr);
+      gap: 32px;
+      align-items: center;
+      margin-top: 40px;
+    }
+    @media (max-width: 980px) {
+      .top-features { grid-template-columns: 1fr; }
+    }
+    .top-list-title {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+    .top-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 15px;
+      color: #111827;
+    }
+    .top-list span {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .top-list span .icon-circle {
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+    }
+    .top-feature-img {
+      border-radius: 26px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(15,23,42,0.18);
+    }
+    .top-feature-img img {
+      width: 100%;
+      display: block;
+      object-fit: cover;
+      height: 280px;
+    }
+
+    .how-grid {
+      display: grid;
+      grid-template-columns: minmax(0,1.1fr) minmax(0,1.1fr);
+      gap: 32px;
+      align-items: flex-start;
+      margin-top: 60px;
+    }
+    @media (max-width: 980px) {
+      .how-grid { grid-template-columns: 1fr; }
+    }
+    .section-title {
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+    .how-list {
+      font-size: 15px;
+      color: #111827;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .how-list span {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .how-collage {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 12px;
+    }
+    .how-main-card,
+    .how-small-card {
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 18px 40px rgba(15,23,42,0.2);
+    }
+    .how-main-card img,
+    .how-small-card img {
+      width: 100%;
+      display: block;
+      height: 170px;
+      object-fit: cover;
+    }
+    .how-steps-card {
+      border-radius: 22px;
+      overflow: hidden;
+      margin-top: 12px;
+      box-shadow: 0 18px 40px rgba(15,23,42,0.4);
+    }
+    .how-steps-card-inner {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      background: #020617;
+      color: #e5e7eb;
+      font-size: 14px;
+    }
+    .how-steps-card-inner div {
+      padding: 14px 16px;
+      border-right: 1px solid rgba(148,163,184,0.3);
+    }
+    .how-steps-card-inner div:last-child {
+      border-right: none;
+    }
+    .how-steps-card-inner span {
+      display: block;
+      font-size: 11px;
+      opacity: .7;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: .16em;
+    }
+
+    .why {
+      margin-top: 60px;
+      display: grid;
+      grid-template-columns: minmax(0,1.1fr) minmax(0,1.1fr);
+      gap: 32px;
+      align-items: flex-start;
+    }
+    @media (max-width: 980px) {
+      .why { grid-template-columns: 1fr; }
+    }
+    .why-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 15px;
+      color: #111827;
+    }
+    .why-list span {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .data-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .data-badges div {
+      padding: 7px 12px;
+      border-radius: 999px;
+      border: 1px solid #e5e7eb;
+      background: #ffffff;
+      font-size: 12px;
+      color: #475569;
+    }
+
+    /* ================= POPUP ================= */
+    .popup {
+      position: fixed;
+      left: 18px;
+      bottom: 24px;
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 10px 14px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 18px 36px rgba(15,23,42,0.25);
+      font-size: 13px;
+      display: none;
+      z-index: 120;
+      animation: fadein .4s ease-out;
+    }
+    @keyframes fadein {
+      from { opacity:0; transform: translateY(18px); }
+      to { opacity:1; transform:none; }
+    }
+
+    /* ================= COOKIE BAR ================= */
+    .cookie-bar {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: #020617;
+      color: #e5e7eb;
+      padding: 12px 18px;
+      font-size: 13px;
+      display: none;
+      z-index: 110;
+    }
+    .cookie-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .cookie-buttons {
+      display: flex;
+      gap: 8px;
+    }
+    .cookie-btn {
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid #4b5563;
+      background: transparent;
+      color: #e5e7eb;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .cookie-btn.accept {
+      background: #22c55e;
+      border-color: #22c55e;
+      color: #0f172a;
+    }
+
+    /* ================= FOOTER ================= */
+    footer {
+      margin-top: 70px;
+      padding: 26px;
+      text-align: center;
+      font-size: 13px;
+      color: #9ca3af;
+      border-top: 1px solid #e5e7eb;
+      background: #f9fafb;
+    }
+    footer a {
+      margin: 0 10px;
+      color: #6b7280;
+    }
+    footer a:hover { color: #111827; }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="logo">AiHousing</div>
+    <nav class="nav">
+      <a href="index.html">Home</a>
+      <a href="sample-report.html">Sample</a>
+      <a href="pricing.html">Pricing</a>
+      <div class="dropdown">
+        <span class="dropdown-btn">Help ▾</span>
+        <div class="dropdown-menu" id="helpMenu">
+          <a href="help.html">Help centre</a>
+          <a href="terms.html">Terms &amp; Conditions</a>
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="cookies.html">Cookies</a>
+          <a href="contact.html">Contact</a>
+        </div>
+      </div>
+      <a href="login.html" class="auth-btn">Login</a>
+      <a href="register.html" class="auth-btn primary">Register</a>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-left">
+        <h1>Understand every property before you fall in love with it.</h1>
+        <p>
+          AiHousing reads listing photos, scans local data and turns everything into a clear human report — 
+          so you can see hidden risks, renovation ideas and negotiation angles before making an offer.
+        </p>
+
+        <div class="hero-badges">
+          <span><div class="dot">⚡</div> Report in under 60 seconds</span>
+          <span><div class="dot">👁️</div> AI photo &amp; area analysis</span>
+          <span><div class="dot">🏠</div> Designed for UK buyers, investors &amp; renters</span>
+        </div>
+
+        <div class="hero-input-card">
+          <input type="text" id="addressInput" placeholder="Postcode or address (e.g. 12 High Road, Beeston, NG9 2GT)" />
+          <input type="text" id="linkInput" placeholder="Rightmove / Zoopla link (optional)" />
+          <div class="hero-upload-row">
+            <label class="hero-upload-pill">
+              <span>⬆</span>
+              <span>Drag &amp; drop photos</span>
+              <input type="file" id="photoInput" multiple />
+            </label>
+          </div>
+          <button id="generateReportBtn" class="hero-cta">Generate smart report</button>
+        </div>
+      </div>
+
+      <div class="hero-right">
+        <div class="live-card">
+          <h3>Live AI insight</h3>
+          <div class="live-row">
+            <span class="live-label">Property</span><br>
+            E14 5AB · 3-bed terrace · User photos
+          </div>
+          <div class="live-row">
+            <span class="live-label">Defects</span><br>
+            Hairline cracks · Potential damp on rear wall
+          </div>
+          <div class="live-row">
+            <span class="live-label">Flood zone</span><br>
+            Low · Zone 1
+          </div>
+          <div class="live-divider"></div>
+          <div class="live-row">
+            <span class="live-label">Overall condition score</span>
+            <div class="live-score">8.1 / 10</div>
+          </div>
+          <div class="live-row">
+            <span class="live-label">Area risk (crime)</span><br>
+            Medium · Night-time noise from nearby high street
+          </div>
+          <div class="live-divider"></div>
+          <div class="live-row">
+            <span class="live-label">Suggested negotiation</span><br>
+            £7,500 – £12,000 price adjustment recommended based on comparable sales.
+          </div>
+          <div style="margin-top:10px;font-size:11px;opacity:.75;">
+            Generated from listing photos + postcode. Powered by computer vision &amp; UK public datasets.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN CONTENT -->
+  <div class="page">
+    <!-- Top feature row -->
+    <section class="top-features">
+      <div>
+        <div class="top-list-title">Built for UK buyers, investors &amp; renters</div>
+        <div class="top-list">
+          <span><div class="icon-circle">⚡</div>Report in under 60 seconds</span>
+          <span><div class="icon-circle">👁️</div>AI photo &amp; area analysis</span>
+          <span><div class="icon-circle">🏠</div>Designed for UK property</span>
+        </div>
+      </div>
+      <div class="top-feature-img">
+        <!-- house-1.jpg – imagine cu casă UK -->
+        <img src="house-1.jpg" alt="UK property" />
+      </div>
+    </section>
+
+    <!-- How it works + collage -->
+    <section class="how-grid">
+      <div>
+        <div class="section-title">How it works</div>
+        <div class="how-list">
+          <span>➜ Understand repair risks before you commit.</span>
+          <span>➜ AI reads your listing photos and local data.</span>
+          <span>➜ Get a structured report with risks &amp; renovation ideas.</span>
+          <span>➜ Use negotiation bullets written in plain English.</span>
+        </div>
+      </div>
+      <div>
+        <div class="how-collage">
+          <div class="how-main-card">
+            <!-- house-2.jpg -->
+            <img src="house-2.jpg" alt="Terraced houses" />
+          </div>
+          <div class="how-small-card">
+            <!-- house-3.jpg -->
+            <img src="house-3.jpg" alt="Semi-detached UK home" />
+          </div>
+        </div>
+        <div class="how-steps-card">
+          <div class="how-steps-card-inner">
+            <div>
+              <span>01</span>
+              Input<br>Postcode, link &amp; photos
+            </div>
+            <div>
+              <span>02</span>
+              Analysis<br>AI + UK open data
+            </div>
+            <div>
+              <span>03</span>
+              Report<br>Defects, risks, negotiation
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Why choose AiHousing -->
+    <section class="why">
+      <div>
+        <div class="section-title">Why choose AiHousing</div>
+        <div class="why-list">
+          <span>⚡ Understand repair risks before survey day.</span>
+          <span>📊 Make sense of EPC, crime, flood and price history.</span>
+          <span>🤝 Strengthen your negotiation with clear bullet points.</span>
+          <span>🔐 Built for privacy – we never share your reports publicly.</span>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:14px;color:#6b7280;margin-bottom:8px;">Trusted UK data sources</div>
+        <div class="data-badges">
+          <div>EPC Register</div>
+          <div>UK Crime Stats</div>
+          <div>Environment Agency Flood Data</div>
+          <div>Land Registry Prices</div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- POPUP PURCHASE -->
+  <div class="popup" id="popup">
+    Someone from <span id="city"></span> just generated a report · <span id="code"></span>
+  </div>
+
+  <!-- COOKIE BAR -->
+  <div class="cookie-bar" id="cookieBar">
+    <div class="cookie-inner">
+      <div>This website uses cookies to improve your experience. You can change your settings at any time.</div>
+      <div class="cookie-buttons">
+        <button class="cookie-btn" id="cookieSettings">Cookie settings</button>
+        <button class="cookie-btn accept" id="cookieAccept">Accept all</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    © 2025 AiHousing ·
+    <a href="terms.html">Terms</a>
+    <a href="privacy.html">Privacy</a>
+    <a href="cookies.html">Cookies</a>
+    <a href="contact.html">Contact</a>
+  </footer>
+
+  <!-- AI LOADING OVERLAY HTML -->
+  <div class="ai-loading-overlay" id="aiLoadingOverlay">
+    <div class="ai-loading-card">
+      <div class="ai-loading-header">
+        <div class="ai-loading-title">Generating your smart report…</div>
+        <div class="ai-loading-pill">AI scan in progress</div>
+      </div>
+      <div class="ai-loading-preview">
+        <div class="ai-scan-line"></div>
+        <div class="ai-scan-pulse"></div>
+      </div>
+      <div class="ai-loading-steps">
+        <div class="ai-step ai-step-1 active">
+          <div class="ai-step-dot"></div>
+          <div>Scanning photos for cracks, damp & layout issues…</div>
+        </div>
+        <div class="ai-step ai-step-2">
+          <div class="ai-step-dot"></div>
+          <div>Checking EPC, crime, flood & sold prices…</div>
+        </div>
+        <div class="ai-step ai-step-3">
+          <div class="ai-step-dot"></div>
+          <div>Building your negotiation bullets…</div>
+        </div>
+      </div>
+      <div class="ai-loading-footer">
+        <span><span class="ai-loading-spinner"></span> Typically under 60 seconds</span>
+        <span>We delete your photos after processing.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRIPTS -->
+  <script>
+    // Dropdown Help
+    document.addEventListener("DOMContentLoaded", () => {
+      const btn = document.querySelector(".dropdown-btn");
+      const menu = document.getElementById("helpMenu");
+      if (btn && menu) {
+        btn.addEventListener("click", () => {
+          menu.style.display = (menu.style.display === "block" ? "none" : "block");
+        });
+      }
+    });
+  </script>
+
+  <script>
+    // Popup "someone just bought"
+    const popupCities = ["London","Manchester","Birmingham","Nottingham","Leeds","Liverpool","Bristol","Sheffield"];
+    const popupCodes = ["E14 5AB","SW1A 2AA","NG9 2GT","BS1 5TR","M1 4BT","L1 8JQ"];
+
+    function showPopup() {
+      const p = document.getElementById("popup");
+      if (!p) return;
+      document.getElementById("city").innerText = popupCities[Math.floor(Math.random()*popupCities.length)];
+      document.getElementById("code").innerText = popupCodes[Math.floor(Math.random()*popupCodes.length)];
+      p.style.display = "block";
+      setTimeout(() => { p.style.display = "none"; }, 4500);
+    }
+    setInterval(showPopup, 15000);
+  </script>
+
+  <script>
+    // Cookie bar
+    (function(){
+      const bar = document.getElementById("cookieBar");
+      if (!bar) return;
+      const choice = localStorage.getItem("aihousing_cookie_choice");
+      if (!choice) {
+        bar.style.display = "block";
+      }
+      document.getElementById("cookieAccept").onclick = () => {
+        localStorage.setItem("aihousing_cookie_choice","accepted");
+        bar.style.display = "none";
+      };
+      document.getElementById("cookieSettings").onclick = () => {
+        localStorage.setItem("aihousing_cookie_choice","settings");
+        bar.style.display = "none";
+      };
+    })();
+  </script>
+
+  <script>
+    // Photo counter in upload pill
+    const fileInput = document.getElementById("photoInput");
+    const uploadPill = document.querySelector(".hero-upload-pill");
+    if (fileInput && uploadPill) {
+      const counter = document.createElement("span");
+      counter.style.fontSize = "12px";
+      counter.style.color = "#0f172a";
+      counter.style.marginLeft = "8px";
+      counter.textContent = "";
+      uploadPill.appendChild(counter);
+
+      fileInput.addEventListener("change", () => {
+        let files = Array.from(fileInput.files);
+        if (files.length > 7) {
+          alert("Maximum 7 photos allowed.");
+          const dataTransfer = new DataTransfer();
+          files.slice(0, 7).forEach(f => dataTransfer.items.add(f));
+          fileInput.files = dataTransfer.files;
+          files = Array.from(fileInput.files);
+        }
+        if (files.length === 0) {
+          counter.textContent = "";
+        } else {
+          counter.textContent = `${files.length} photo${files.length > 1 ? 's' : ''} added`;
+        }
+      });
+    }
+  </script>
+
+  <script>
+    // AI overlay + redirect to paywall
+    const overlay = document.getElementById('aiLoadingOverlay');
+    const steps = [
+      document.querySelector('.ai-step-1'),
+      document.querySelector('.ai-step-2'),
+      document.querySelector('.ai-step-3')
+    ];
+
+    function isFullAddress(str) {
+      // minim o cifră + cel puțin un spațiu (evită doar "NG9")
+      return /\d+/.test(str) && /\s+/.test(str);
+    }
+
+    function showAiLoadingAndGo() {
+      const addressInput = document.getElementById("addressInput");
+      const linkInput = document.getElementById("linkInput");
+      const photoInput = document.getElementById("photoInput");
+      if (!addressInput || !linkInput || !photoInput) return;
+
+      const address = addressInput.value.trim();
+      const link = linkInput.value.trim();
+      const files = photoInput.files;
+
+      // Regula ta: dacă nu există link + nu există poze, obligăm adresă completă
+      if (!link && files.length === 0) {
+        if (!isFullAddress(address)) {
+          alert("Te rog introdu o adresă completă (ex: 12 High Road, Beeston, NG9 2GT).");
+          return;
+        }
+      }
+
+      // Pornim overlay
+      overlay.style.display = 'flex';
+      steps.forEach(s => s.classList.remove('active'));
+      if (steps[0]) steps[0].classList.add('active');
+
+      let i = 0;
+      const interval = setInterval(() => {
+        steps.forEach(s => s.classList.remove('active'));
+        i = (i + 1) % steps.length;
+        if (steps[i]) steps[i].classList.add('active');
+      }, 1600);
+
+      // Convertim pozele în base64 + salvăm totul în localStorage
+      const readerPromises = [];
+      for (let f of files) {
+        readerPromises.push(new Promise((resolve) => {
+          const r = new FileReader();
+          r.onload = () => resolve(r.result);
+          r.readAsDataURL(f);
+        }));
+      }
+
+      Promise.all(readerPromises).then(images => {
+        localStorage.setItem("ai_postcode", address || "");
+        localStorage.setItem("ai_link", link || "");
+        localStorage.setItem("ai_images", JSON.stringify(images || []));
+
+        // Mic delay să se simtă "scanarea"
+        setTimeout(() => {
+          clearInterval(interval);
+          overlay.style.display = 'none';
+          window.location.href = "paywall.html";
+        }, 2500);
+      });
+    }
+
+    const genBtn = document.getElementById("generateReportBtn");
+    if (genBtn) {
+      genBtn.addEventListener("click", showAiLoadingAndGo);
+    }
+  </script>
+</body>
+</html>

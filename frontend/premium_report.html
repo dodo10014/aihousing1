@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>AiHousing – Your AI Property Report</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Full AI-powered property report with condition, risks, area data, price history and negotiation bullets.">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f5f5f7;
+      color: #0f172a;
+    }
+    a { text-decoration: none; color: inherit; }
+
+    /* ============== HEADER (same style as index) ============== */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 80;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 40px;
+      backdrop-filter: blur(18px);
+      background: rgba(248,250,252,0.95);
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .logo {
+      font-size: 26px;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      position: relative;
+      color: #0f172a;
+    }
+    .logo::after {
+      content: "";
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: radial-gradient(circle, #4ade80, #16a34a);
+      right: -12px;
+      bottom: 0;
+      box-shadow: 0 0 10px rgba(34,197,94,0.8);
+    }
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 26px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    .nav a:hover { color: #22c55e; }
+    .nav a.active { color: #22c55e; font-weight: 600; }
+
+    .dropdown { position: relative; cursor: pointer; }
+    .dropdown-menu {
+      position: absolute;
+      right: 0;
+      top: 30px;
+      min-width: 180px;
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      box-shadow: 0 18px 40px rgba(15,23,42,0.16);
+      padding: 8px 0;
+      display: none;
+      z-index: 100;
+    }
+    .dropdown-menu a {
+      display: block;
+      padding: 10px 14px;
+      font-size: 14px;
+    }
+    .dropdown-menu a:hover { background: #f3f4f6; }
+
+    .auth-btn {
+      padding: 9px 16px;
+      border-radius: 999px;
+      border: 1px solid #cbd5e1;
+      font-size: 13px;
+      font-weight: 600;
+      background: #ffffff;
+      color: #0f172a;
+      cursor: pointer;
+      transition: .2s;
+    }
+    .auth-btn:hover { background: #f3f4f6; }
+    .auth-btn.primary {
+      background: #22c55e;
+      border-color: #22c55e;
+      color: #fff;
+    }
+    .auth-btn.primary:hover { background: #16a34a; }
+
+    @media (max-width: 900px) {
+      header { padding: 12px 18px; }
+      .nav { gap: 16px; font-size: 13px; }
+    }
+
+    /* ============== PAGE LAYOUT ============== */
+    .page {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 26px 18px 70px;
+    }
+
+    .breadcrumb-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 13px;
+      color: #6b7280;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .breadcrumb span.separator {
+      opacity: 0.6;
+    }
+
+    .report-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      padding: 9px 14px;
+      border-radius: 999px;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn:hover { background: #f3f4f6; }
+    .btn.primary {
+      background: #0f172a;
+      border-color: #0f172a;
+      color: #ffffff;
+    }
+    .btn.primary:hover { background: #020617; }
+
+    .report-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      gap: 22px;
+      align-items: flex-start;
+      margin-bottom: 28px;
+    }
+    @media (max-width: 960px) {
+      .report-head {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .report-title {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 4px;
+    }
+    .report-sub {
+      font-size: 13px;
+      color: #6b7280;
+      margin-bottom: 10px;
+    }
+
+    .tags-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .tag {
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid #e5e7eb;
+      background: #ffffff;
+      font-size: 11px;
+      color: #4b5563;
+    }
+
+    .summary-card {
+      background: #ffffff;
+      border-radius: 22px;
+      border: 1px solid #e2e8f0;
+      padding: 18px 18px 14px;
+      box-shadow: 0 16px 40px rgba(15,23,42,0.06);
+    }
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+    @media (max-width: 720px) {
+      .summary-grid {
+        grid-template-columns: repeat(2, minmax(0,1fr));
+      }
+    }
+    .summary-item {
+      font-size: 12px;
+      color: #6b7280;
+    }
+    .summary-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: #9ca3af;
+      margin-bottom: 3px;
+    }
+    .summary-value {
+      font-size: 15px;
+      font-weight: 600;
+      color: #111827;
+    }
+    .overall-score {
+      font-size: 30px;
+      font-weight: 800;
+      letter-spacing: -0.05em;
+      color: #22c55e;
+    }
+    .score-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 4px;
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: #ecfdf3;
+      color: #15803d;
+      border: 1px solid #bbf7d0;
+    }
+
+    .side-panel {
+      background: #020617;
+      color: #e5e7eb;
+      border-radius: 22px;
+      padding: 16px 16px 14px;
+      box-shadow: 0 20px 50px rgba(15,23,42,0.7);
+      border: 1px solid rgba(148,163,184,0.4);
+      font-size: 13px;
+    }
+    .side-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      color: #94a3b8;
+      margin-bottom: 6px;
+    }
+    .side-main {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .risk-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: rgba(248,250,252,0.04);
+      border: 1px solid rgba(148,163,184,0.5);
+      font-size: 11px;
+      margin-bottom: 8px;
+    }
+    .risk-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 10px rgba(34,197,94,0.9);
+    }
+
+    .side-list {
+      font-size: 12px;
+      color: #cbd5f5;
+      margin-top: 6px;
+      padding-left: 14px;
+    }
+    .side-list li {
+      margin-bottom: 3px;
+    }
+
+    .side-note {
+      font-size: 11px;
+      color: #94a3b8;
+      margin-top: 8px;
+    }
+
+    .section {
+      margin-top: 32px;
+    }
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+    .section-title {
+      font-size: 18px;
+      font-weight: 700;
+    }
+    .section-tagline {
+      font-size: 13px;
+      color: #6b7280;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 18px;
+      border: 1px solid #e2e8f0;
+      padding: 14px 14px 12px;
+      box-shadow: 0 12px 30px rgba(15,23,42,0.04);
+      font-size: 13px;
+    }
+
+    .summary-bullets {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 14px;
+      color: #111827;
+    }
+    .summary-bullets span {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+    .summary-icon {
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      border: 1px solid #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      background: #f9fafb;
+      margin-top: 1px;
+    }
+
+    .photos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 14px;
+    }
+    .photo-card {
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid #e5e7eb;
+      background: #ffffff;
+      box-shadow: 0 12px 26px rgba(15,23,42,0.06);
+    }
+    .photo-card img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      display: block;
+    }
+    .photo-body {
+      padding: 10px 12px 10px;
+      font-size: 12px;
+    }
+    .photo-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: #9ca3af;
+      margin-bottom: 4px;
+    }
+    .photo-title {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
+    .photo-tag-row {
+      margin-top: 6px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .photo-tag {
+      font-size: 11px;
+      padding: 3px 7px;
+      border-radius: 999px;
+      background: #f3f4f6;
+      color: #4b5563;
+    }
+
+    .area-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+    }
+    .metric-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: #9ca3af;
+      margin-bottom: 4px;
+    }
+    .metric-main {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .metric-sub {
+      font-size: 12px;
+      color: #6b7280;
+    }
+
+    .price-grid {
+      display: grid;
+      grid-template-columns: minmax(0,1.2fr) minmax(0,1fr);
+      gap: 14px;
+    }
+    @media (max-width: 900px) {
+      .price-grid { grid-template-columns: 1fr; }
+    }
+    .price-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      margin-bottom: 6px;
+    }
+    .price-label {
+      color: #6b7280;
+    }
+    .price-value {
+      font-weight: 600;
+    }
+    .comps-list {
+      font-size: 12px;
+      color: #4b5563;
+      margin-top: 6px;
+      padding-left: 16px;
+    }
+    .comps-list li {
+      margin-bottom: 3px;
+    }
+
+    .reno-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 14px;
+    }
+    .reno-item-title {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
+    .reno-cost {
+      font-size: 12px;
+      color: #16a34a;
+      margin-bottom: 4px;
+    }
+    .reno-note {
+      font-size: 12px;
+      color: #6b7280;
+    }
+
+    .neg-grid {
+      display: grid;
+      grid-template-columns: minmax(0,1.4fr) minmax(0,1fr);
+      gap: 14px;
+    }
+    @media (max-width: 900px) {
+      .neg-grid { grid-template-columns: 1fr; }
+    }
+    .neg-list {
+      font-size: 13px;
+      color: #111827;
+      padding-left: 18px;
+    }
+    .neg-list li {
+      margin-bottom: 6px;
+    }
+    .copy-box {
+      background: #0f172a;
+      border-radius: 16px;
+      padding: 12px 14px;
+      color: #e5e7eb;
+      font-size: 12px;
+      border: 1px solid rgba(148,163,184,0.5);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .copy-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+    .copy-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      color: #94a3b8;
+    }
+    .copy-text {
+      font-size: 12px;
+      color: #cbd5f5;
+      line-height: 1.5;
+      white-space: pre-line;
+    }
+    .copy-hint {
+      font-size: 11px;
+      color: #94a3b8;
+    }
+
+    .next-list {
+      font-size: 13px;
+      color: #111827;
+      padding-left: 18px;
+    }
+    .next-list li {
+      margin-bottom: 6px;
+    }
+
+    footer {
+      margin-top: 50px;
+      padding: 26px;
+      text-align: center;
+      font-size: 13px;
+      color: #9ca3af;
+      border-top: 1px solid #e5e7eb;
+      background: #f9fafb;
+    }
+    footer a {
+      margin: 0 10px;
+      color: #6b7280;
+    }
+    footer a:hover { color: #111827; }
+
+    /* ============== SKELETON SHIMMER ============== */
+    .skeleton-block {
+      position: relative;
+      overflow: hidden;
+      background: #e5e7eb;
+      border-radius: 999px;
+      color: transparent;
+    }
+    .skeleton-rect {
+      border-radius: 10px;
+    }
+    .skeleton-block::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg,
+        rgba(148,163,184,0),
+        rgba(148,163,184,0.6),
+        rgba(148,163,184,0)
+      );
+      transform: translateX(-100%);
+      animation: skeleton-shimmer 1.2s infinite;
+    }
+    @keyframes skeleton-shimmer {
+      100% {
+        transform: translateX(100%);
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">AiHousing</div>
+
+  <nav class="nav">
+    <a href="index.html">Home</a>
+    <a href="sample-report.html">Sample</a>
+    <a href="pricing.html">Pricing</a>
+
+    <div class="dropdown">
+      <span class="dropdown-btn">Help ▾</span>
+      <div class="dropdown-menu" id="helpMenu">
+        <a href="help.html">Help centre</a>
+        <a href="terms.html">Terms &amp; Conditions</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="cookies.html">Cookies</a>
+        <a href="contact.html">Contact</a>
+      </div>
+    </div>
+
+    <a href="login.html" class="auth-btn">Login</a>
+    <a href="register.html" class="auth-btn primary">Register</a>
+  </nav>
+</header>
+
+<script>
+  // doar dropdown meniu
+  document.addEventListener("DOMContentLoaded", () => {
+    const btn = document.querySelector(".dropdown-btn");
+    const menu = document.getElementById("helpMenu");
+    if (btn && menu) {
+      btn.addEventListener("click", () => {
+        menu.style.display = menu.style.display === "block" ? "none" : "block";
+      });
+    }
+  });
+</script>
+
+<div class="page">
+
+  <!-- BREADCRUMB + ACTIONS -->
+  <div class="breadcrumb-row">
+    <div class="breadcrumb">
+      <a href="dashboard.html">Dashboard</a>
+      <span class="separator">›</span>
+      <a href="dashboard.html#reports">Reports</a>
+      <span class="separator">›</span>
+      <span id="breadcrumb-current">Full AI report</span>
+    </div>
+
+    <div class="report-actions">
+      <button class="btn" onclick="window.location.href='dashboard.html'">← Back to dashboard</button>
+      <button class="btn primary" id="downloadBtn">Download PDF</button>
+    </div>
+  </div>
+
+  <div id="loading" style="font-size:13px;color:#6b7280;margin-bottom:10px;">
+    Loading your AI report…
+  </div>
+  <div id="error" style="display:none;font-size:13px;color:#dc2626;margin-bottom:10px;"></div>
+
+  <!-- TOP SUMMARY -->
+  <div class="report-head">
+    <div>
+      <div class="report-title" id="report-title">
+        3-bed terrace · E14 5AB, London
+      </div>
+      <div class="report-sub" id="report-sub">
+        Generated: <strong>12 March 2025 · 19:42</strong> · Report ID: <strong>#AIE14-3927</strong>
+      </div>
+
+      <div class="summary-card">
+        <div class="section-tagline" id="summary-tagline" style="margin-bottom:6px;">
+          Instant summary – this is a solid property with some manageable damp risk and cosmetic upgrades.
+        </div>
+
+        <div class="summary-grid">
+          <div class="summary-item">
+            <div class="summary-label">Overall condition</div>
+            <div class="overall-score" id="overall-score">8.1 / 10</div>
+            <div class="score-chip">
+              <span id="overall-condition-label">● Low-medium risk · Good structure</span>
+            </div>
+          </div>
+
+          <div class="summary-item">
+            <div class="summary-label">Max recommended offer</div>
+            <div class="summary-value" id="summary-max-offer">£422,500</div>
+            <div style="font-size:12px;color:#6b7280;">vs asking price <span id="summary-vs-asking">£435,000</span></div>
+          </div>
+
+          <div class="summary-item">
+            <div class="summary-label">AI value range</div>
+            <div class="summary-value" id="summary-ai-range">£410,000 – £430,000</div>
+            <div style="font-size:12px;color:#6b7280;">Based on local comparables</div>
+          </div>
+
+          <div class="summary-item">
+            <div class="summary-label">Damp / mould risk</div>
+            <div class="summary-value" id="summary-damp">Elevated in rear reception</div>
+          </div>
+
+          <div class="summary-item">
+            <div class="summary-label">Crime & noise</div>
+            <div class="summary-value" id="summary-crime">Medium · city-edge high street</div>
+          </div>
+
+          <div class="summary-item">
+            <div class="summary-label">Flood zone</div>
+            <div class="summary-value" id="summary-flood">Low · Zone 1</div>
+          </div>
+        </div>
+
+        <div class="tags-row" id="summary-tags">
+          <div class="tag">Buyer type: first-time or upgrader</div>
+          <div class="tag">Mortgage: suitable, subject to lender valuation</div>
+          <div class="tag">Good for: long-term hold · family home</div>
+        </div>
+      </div>
+    </div>
+
+    <aside class="side-panel">
+      <div class="side-label">AiHousing risk view</div>
+      <div class="side-main" id="side-main">Cautious green light ✅</div>
+
+      <div class="risk-chip" id="side-chip">
+        <div class="risk-dot"></div>
+        Structurally positive, with damp & upgrade caveats.
+      </div>
+
+      <ul class="side-list" id="side-list">
+        <li>Structure looks broadly sound from photos.</li>
+        <li>Historic/active damp likely on rear wall.</li>
+        <li>Kitchen and bathroom dated vs area standard.</li>
+        <li>Area crime medium – typical for London zone.</li>
+      </ul>
+
+      <div class="side-note" id="side-note">
+        This summary is based on photos + open data. For a mortgage or legal decision,
+        we recommend a RICS survey.
+      </div>
+    </aside>
+  </div>
+
+  <!-- 1. SUMMARY & KEY POINTS -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-title">1. What AiHousing thinks in plain English</div>
+      <div class="section-tagline">You can share this summary with your partner, broker or friends.</div>
+    </div>
+
+    <div class="card">
+      <div class="summary-bullets" id="section1-bullets">
+        <!-- se umple din JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. PHOTOS & DEFECTS -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-title">2. Condition from photos – what AI sees</div>
+      <div class="section-tagline">We analyse your uploaded photos for cracks, damp, mould, layout & defects.</div>
+    </div>
+
+    <div class="photos-grid" id="photos-grid">
+      <!-- AI-generated cards -->
+    </div>
+  </section>
+
+  <!-- 3. AREA & DATA -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-title">3. Area & official data checks</div>
+      <div class="section-tagline">We connect your postcode with EPC, crime, flood and sold-price records.</div>
+    </div>
+
+    <div class="area-grid">
+      <div class="card">
+        <div class="metric-label">EPC & energy</div>
+        <div class="metric-main" id="epc-main">Band C · 77 (potential 82)</div>
+        <div class="metric-sub" id="epc-sub">
+          Above average for this property type and age. EPC suggests reasonable insulation and heating efficiency,
+          with modest upgrade potential.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="metric-label">Crime & safety</div>
+        <div class="metric-main" id="crime-main">Medium vs London average</div>
+        <div class="metric-sub" id="crime-sub">
+          Crime levels typical for an inner-London postcode near a high street. Higher for theft and
+          bike crime, lower for serious violence compared to some neighbouring districts.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="metric-label">Flood & environment</div>
+        <div class="metric-main" id="flood-main">Low flood risk · Zone 1</div>
+        <div class="metric-sub" id="flood-sub">
+          No significant fluvial or tidal flood risk flagged. Surface water pooling risk is low-medium
+          in heavier storms, consistent with local streets.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="metric-label">Price history & trends</div>
+        <div class="metric-main" id="price-history-main">Local values steady to mildly rising</div>
+        <div class="metric-sub" id="price-history-sub">
+          Over the last 5 years, similar terraces in this pocket have shown a steady upward trend
+          with small dips during market slowdowns but no sharp drops.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. PRICE & COMPARABLES -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-title">4. Price, AI valuation & local comparables</div>
+      <div class="section-tagline">We cross-check asking price against recent sales nearby.</div>
+    </div>
+
+    <div class="price-grid">
+      <div class="card">
+        <div class="price-row">
+          <div class="price-label">Asking price</div>
+          <div class="price-value" id="asking-price">£435,000</div>
+        </div>
+        <div class="price-row">
+          <div class="price-label">AiHousing value range</div>
+          <div class="price-value" id="price-ai-range">£410,000 – £430,000</div>
+        </div>
+        <div class="price-row">
+          <div class="price-label">Suggested negotiation window</div>
+          <div class="price-value" id="price-negotiation-window">£7,500 – £15,000</div>
+        </div>
+        <div class="price-row">
+          <div class="price-label">If fully refurbished</div>
+          <div class="price-value" id="price-refurbished-range">~£455,000 – £470,000</div>
+        </div>
+
+        <div style="font-size:12px;color:#6b7280;margin-top:8px;">
+          This range is based on recent Land Registry sales for similar 3-bed terraces within
+          roughly 0.5 miles, adjusted for condition, size and immediate street appeal.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="metric-label">Key comparables we looked at</div>
+        <ul class="comps-list" id="comps-list">
+          <li><strong>3-bed terrace · E14 5AC</strong> – sold for <strong>£422,000</strong> (good condition, smaller kitchen).</li>
+          <li><strong>3-bed terrace · E14 5BD</strong> – sold for <strong>£438,000</strong> (recent refurb, quieter side street).</li>
+          <li><strong>3-bed end-terrace · E14 5AA</strong> – sold for <strong>£447,500</strong> (corner plot, off-street parking).</li>
+        </ul>
+        <div style="font-size:12px;color:#6b7280;margin-top:6px;">
+          AiHousing does not provide a formal valuation – this is an AI-assisted range to support your own judgement
+          and any surveyor or lender assessments.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. RENOVATION & UPGRADE IDEAS -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-title">5. Renovation & upgrade ideas</div>
+      <div class="section-tagline">Where your money is likely to go in the first 1-5 years.</div>
+    </div>
+
+    <div class="reno-grid">
+      <div class="card">
+        <div class="reno-item-title">Damp investigation & treatment</div>
+        <div class="reno-cost">Estimated: £800 – £2,000</div>
+        <div class="reno-note">
+          Allow for a damp specialist to investigate rear reception and any skirting staining,
+          plus potential re-plastering and redecorating.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="reno-item-title">Kitchen refresh or replacement</div>
+        <div class="reno-cost">Estimated: £3,500 – £9,000</div>
+        <div class="reno-note">
+          Range depends on whether you keep existing layout and appliances or move to a full
+          mid-range refit with improved storage and lighting.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="reno-item-title">Bathroom modernisation</div>
+        <div class="reno-cost">Estimated: £3,000 – £7,000</div>
+        <div class="reno-note">
+          Typical cost for a standard UK bathroom refit with better tiling, ventilation
+          and water-efficient fixtures.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="reno-item-title">Cosmetic décor & flooring</div>
+        <div class="reno-cost">Estimated: £1,500 – £4,000</div>
+        <div class="reno-note">
+          Repainting key rooms, updating tired carpets/laminate and improving lighting can
+          significantly boost feel without structural work.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. NEGOTIATION BULLETS -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-title">6. Negotiation bullets to send your agent</div>
+      <div class="section-tagline">Copy, paste and adapt to your own tone.</div>
+    </div>
+
+    <div class="neg-grid">
+      <div class="card">
+        <ul class="neg-list" id="neg-list">
+          <!-- se umple din AI -->
+        </ul>
+      </div>
+
+      <div class="copy-box">
+        <div class="copy-header">
+          <div class="copy-label">Email / WhatsApp template</div>
+          <button class="copy-btn" id="copyNegBtn">Copy to clipboard</button>
+        </div>
+        <div class="copy-text" id="negText">
+          <!-- text email din AI -->
+        </div>
+        <div class="copy-hint">You can edit the wording to match your own voice before sending.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. NEXT STEPS -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-title">7. Next steps we suggest</div>
+      <div class="section-tagline">Use this as a simple checklist.</div>
+    </div>
+
+    <div class="card">
+      <ul class="next-list" id="next-steps">
+        <!-- se umple din AI -->
+      </ul>
+      <div style="font-size:12px;color:#6b7280;margin-top:8px;">
+        AiHousing gives you an AI-assisted snapshot so you don’t walk in blind. It does not replace a professional
+        surveyor, solicitor or financial adviser.
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. FULL AI REPORT (RAW TEXT) -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-title">Full AI report (raw text)</div>
+      <div class="section-tagline">For transparency, here is the full AI-generated text used to build this layout.</div>
+    </div>
+
+    <div class="card">
+      <pre id="raw-report" style="white-space:pre-wrap;font-family:inherit;font-size:13px;color:#111827;"></pre>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  © 2025 AiHousing ·
+  <a href="terms.html">Terms</a>
+  <a href="privacy.html">Privacy</a>
+  <a href="cookies.html">Cookies</a>
+  <a href="contact.html">Contact</a>
+</footer>
+
+<!-- AICI, ÎN AFARA ORICĂRUI ALT <script> -->
+<script src="premium_report.js"></script>
+</body>
+</html>

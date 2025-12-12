@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AiHousing Blog – UK Property Intelligence</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Inter", sans-serif;
+      background: #f3f4f6;
+      color: #0f172a;
+    }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 99;
+      background: #ffffffee;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 16px 40px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      backdrop-filter: blur(12px);
+    }
+    .logo-wrap {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      display:flex;
+      align-items:center;
+      color:#0f172a;
+    }
+    .logo-dot {
+      width:9px;height:9px;background:#22c55e;border-radius:50%;
+      margin-left:4px;margin-bottom:-2px;box-shadow:0 0 8px #22c55e;
+    }
+    nav { display:flex;gap:24px;font-size:15px;font-weight:500; }
+    nav a { color:#0f172a;text-decoration:none;transition:.2s; }
+    nav a:hover { color:#22c55e; }
+    nav a.active { color:#22c55e;font-weight:700; }
+
+    .page { max-width:1120px;margin:0 auto;padding:40px 20px 80px; }
+
+    .blog-hero-title {
+      font-size: 34px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 8px;
+    }
+    .blog-hero-sub {
+      font-size: 15px;
+      color:#64748b;
+      max-width:580px;
+      margin-bottom: 22px;
+    }
+
+    .posts-grid {
+      display:grid;
+      grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
+      gap:20px;
+    }
+    .post-card {
+      background:#ffffff;
+      border-radius:18px;
+      border:1px solid #e5e7eb;
+      padding:18px 18px 16px;
+      box-shadow:0 10px 30px rgba(15,23,42,0.06);
+      display:flex;
+      flex-direction:column;
+      text-decoration:none;
+      color:#0f172a;
+    }
+    .post-tag {
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      color:#9ca3af;
+      margin-bottom:4px;
+    }
+    .post-title {
+      font-size:17px;
+      font-weight:700;
+      margin-bottom:6px;
+    }
+    .post-excerpt {
+      font-size:14px;
+      color:#6b7280;
+      margin-bottom:10px;
+    }
+    .post-meta {
+      font-size:12px;
+      color:#9ca3af;
+      margin-top:auto;
+    }
+
+    footer {
+      margin-top:80px;
+      background:#ffffff;
+      border-top:1px solid #e5e7eb;
+      padding:30px;
+      text-align:center;
+      color:#6b7280;
+      font-size:14px;
+    }
+    footer a {
+      margin:0 10px;
+      color:#0f172a;
+      text-decoration:none;
+      font-weight:600;
+    }
+    footer a:hover { color:#22c55e; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo-wrap">
+    AiHousing<div class="logo-dot"></div>
+  </div>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="sample-report.html">Sample</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="investors.html">Investors</a>
+    <a href="blog.html" class="active">Blog</a>
+    <a href="help.html">Help</a>
+    <a href="login.html">Login</a>
+  </nav>
+</header>
+
+<div class="page">
+  <div class="blog-hero-title">AiHousing Property Insights</div>
+  <div class="blog-hero-sub">
+    Practical guides on reading EPCs, spotting damp from photos, understanding UK crime data,
+    flood maps, and negotiating with agents using real data – not guesswork.
+  </div>
+
+  <div class="posts-grid">
+    <a href="blog-spot-damp-from-photos.html" class="post-card">
+      <div class="post-tag">Condition · Damp</div>
+      <div class="post-title">How to spot damp and mould from listing photos</div>
+      <div class="post-excerpt">
+        9 visual clues that suggest hidden damp – before you even book a viewing.
+      </div>
+      <div class="post-meta">Reading time: 7 min · Updated 2025</div>
+    </a>
+
+    <a href="blog-epc-explained.html" class="post-card">
+      <div class="post-tag">Energy · EPC</div>
+      <div class="post-title">EPC ratings explained: what buyers and investors should know</div>
+      <div class="post-excerpt">
+        Why EPC C is becoming the new minimum – and how it affects value and rentability.
+      </div>
+      <div class="post-meta">Reading time: 6 min</div>
+    </a>
+
+    <a href="blog-crime-data.html" class="post-card">
+      <div class="post-tag">Area · Crime</div>
+      <div class="post-title">How to read UK crime data when choosing a street</div>
+      <div class="post-excerpt">
+        Not all “medium crime” postcodes are the same – here’s how to read between the lines.
+      </div>
+      <div class="post-meta">Reading time: 8 min</div>
+    </a>
+
+    <a href="blog-negotiation-bullets.html" class="post-card">
+      <div class="post-tag">Negotiation</div>
+      <div class="post-title">Turning defects into negotiation bullets with AiHousing</div>
+      <div class="post-excerpt">
+        Templates and phrases you can paste directly into emails to agents.
+      </div>
+      <div class="post-meta">Reading time: 5 min</div>
+    </a>
+  </div>
+</div>
+
+<footer>
+  © 2025 AiHousing ·
+  <a href="terms.html">Terms</a> ·
+  <a href="privacy.html">Privacy</a> ·
+  <a href="cookies.html">Cookies</a> ·
+  <a href="contact.html">Contact</a>
+</footer>
+
+</body>
+</html>

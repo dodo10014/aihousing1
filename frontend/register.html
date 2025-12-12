@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Create Account – AiHousing</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Inter", sans-serif;
+      background: #f8fafc;
+      color: #0f172a;
+    }
+
+    /* HEADER */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #ffffffee;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 16px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      backdrop-filter: blur(12px);
+    }
+
+    .logo-wrap {
+      font-size: 26px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      letter-spacing: -0.03em;
+    }
+
+    .logo-dot {
+      width: 9px;
+      height: 9px;
+      background: #22c55e;
+      border-radius: 50%;
+      margin-left: 4px;
+      margin-bottom: -2px;
+      box-shadow: 0 0 8px #22c55e;
+    }
+
+    nav {
+      display: flex;
+      gap: 26px;
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    nav a {
+      color: #0f172a;
+      text-decoration: none;
+    }
+
+    nav a:hover { color: #22c55e; }
+
+    /* PAGE */
+    .page {
+      max-width: 420px;
+      margin: 80px auto;
+      padding: 20px;
+    }
+
+    .card {
+      background: #ffffff;
+      padding: 36px;
+      border-radius: 22px;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 18px 40px rgba(0,0,0,0.06);
+    }
+
+    h1 {
+      font-size: 30px;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    p {
+      color: #6b7280;
+      font-size: 15px;
+      margin-bottom: 24px;
+    }
+
+    label {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      margin-bottom: 16px;
+      border-radius: 14px;
+      background: #f9fafb;
+      border: 1px solid #cbd5e1;
+      font-size: 15px;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 14px;
+      border-radius: 14px;
+      background: #22c55e;
+      color: white;
+      font-size: 16px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      transition: 0.25s;
+    }
+    .btn:hover { background: #15803d; }
+
+    .small-link {
+      margin-top: 16px;
+      display: block;
+      text-align: center;
+      color: #2563eb;
+      font-size: 14px;
+    }
+
+    .small-link:hover { text-decoration: underline; }
+
+    /* FOOTER */
+    footer {
+      margin-top: 80px;
+      text-align: center;
+      padding: 30px;
+      border-top: 1px solid #e5e7eb;
+      background: #ffffff;
+      color: #6b7280;
+      font-size: 14px;
+    }
+
+    footer a {
+      margin: 0 10px;
+      color: #0f172a;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    footer a:hover { color: #22c55e; }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo-wrap">
+    AiHousing<div class="logo-dot"></div>
+  </div>
+
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="sample-report.html">Sample</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="help.html">Help</a>
+    <a href="login.html">Login</a>
+    <a href="register.html" style="color:#22c55e;font-weight:700;">Register</a>
+  </nav>
+</header>
+
+
+<div class="page">
+  <div class="card">
+    <h1>Create Account</h1>
+    <p>Save reports, manage payments, and access unlimited analysis.</p>
+
+    <label>Email</label>
+    <input type="email" placeholder="you@example.com">
+
+    <label>Password</label>
+    <input type="password" placeholder="••••••••">
+
+    <label>Confirm Password</label>
+    <input type="password" placeholder="••••••••">
+
+    <button class="btn">Create Account</button>
+
+    <a class="small-link" href="login.html">Already have an account? Login</a>
+  </div>
+</div>
+
+<footer>
+  © 2025 AiHousing · 
+  <a href="terms.html">Terms</a>  
+  · <a href="privacy.html">Privacy</a>  
+  · <a href="cookies.html">Cookies</a>  
+  · <a href="contact.html">Contact</a>
+</footer>
+
+</body>
+</html>

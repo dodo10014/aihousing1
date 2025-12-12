@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard – AiHousing</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Inter", sans-serif;
+      background: #f8fafc;
+      color: #0f172a;
+    }
+
+    /* HEADER */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #ffffffee;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 16px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      backdrop-filter: blur(12px);
+    }
+
+    .logo-wrap {
+      display: flex;
+      align-items: center;
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: #0f172a;
+    }
+
+    .logo-dot {
+      width: 9px;
+      height: 9px;
+      background: #22c55e;
+      border-radius: 50%;
+      margin-left: 4px;
+      margin-bottom: -2px;
+      box-shadow: 0 0 8px #22c55e;
+    }
+
+    nav {
+      display: flex;
+      gap: 26px;
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    nav a {
+      color: #0f172a;
+      text-decoration: none;
+      transition: 0.2s;
+    }
+
+    nav a:hover { color: #22c55e; }
+
+    nav a.active {
+      color: #22c55e;
+      font-weight: 700;
+    }
+
+    /* PAGE WRAPPER */
+    .page {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 36px 20px 90px;
+    }
+
+    .dash-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: center;
+      margin-bottom: 26px;
+      flex-wrap: wrap;
+    }
+
+    .dash-title {
+      font-size: 30px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .dash-subtitle {
+      font-size: 14px;
+      color: #6b7280;
+      margin-top: 4px;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      background: #22c55e;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 14px;
+      font-size: 15px;
+      font-weight: 700;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: 0.25s;
+      white-space: nowrap;
+    }
+    .btn-primary:hover { background: #15803d; }
+
+    /* GRID LAYOUT */
+    .grid-main {
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1.3fr);
+      gap: 24px;
+    }
+
+    @media (max-width: 900px) {
+      .grid-main {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 18px;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 12px 30px rgba(15,23,42,0.04);
+      padding: 22px 22px 20px;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .card-badge {
+      font-size: 11px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: #e0f2fe;
+      color: #0369a1;
+      border: 1px solid #bae6fd;
+    }
+
+    .card-body {
+      font-size: 14px;
+      color: #475569;
+    }
+
+    /* OVERVIEW STATS */
+    .overview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 14px;
+      margin-top: 10px;
+    }
+
+    .stat-pill {
+      padding: 12px 12px;
+      border-radius: 14px;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      font-size: 13px;
+    }
+
+    .stat-label {
+      color: #6b7280;
+      margin-bottom: 4px;
+    }
+
+    .stat-value {
+      font-weight: 700;
+      font-size: 15px;
+    }
+
+    /* REPORT LIST */
+    .report-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .report-item {
+      padding: 12px 12px;
+      border-radius: 12px;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      font-size: 13px;
+    }
+
+    .report-main {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .report-line-1 {
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .report-line-2 {
+      color: #6b7280;
+      font-size: 12px;
+    }
+
+    .report-meta {
+      text-align: right;
+      font-size: 12px;
+      color: #6b7280;
+    }
+
+    .report-meta strong {
+      display: block;
+      font-size: 13px;
+      color: #16a34a;
+    }
+
+    .report-link {
+      display: inline-block;
+      margin-top: 4px;
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .report-link:hover { text-decoration: underline; }
+
+    /* PAYMENTS LIST */
+    .payments-list {
+      margin-top: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .payment-item {
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      font-size: 13px;
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .payment-status {
+      font-size: 12px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: #dcfce7;
+      color: #166534;
+      font-weight: 600;
+    }
+
+    .payment-failed {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    /* GENERATE NEW REPORT CARD */
+    .form-row {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    label {
+      font-size: 13px;
+      font-weight: 600;
+      color: #4b5563;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid #d1d5db;
+      background: #f9fafb;
+      font-size: 14px;
+    }
+
+    .upload-box {
+      margin-top: 6px;
+      padding: 14px;
+      border-radius: 12px;
+      border: 1px dashed #cbd5e1;
+      background: #f9fafb;
+      font-size: 13px;
+      color: #64748b;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .upload-box span {
+      font-weight: 600;
+      color: #0f172a;
+    }
+
+    /* SECONDARY GRID UNDER MAIN */
+    .grid-bottom {
+      margin-top: 24px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
+    .pill-label {
+      display: inline-block;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: #e5e7eb;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: #4b5563;
+      margin-bottom: 6px;
+    }
+
+    /* FOOTER */
+    footer {
+      margin-top: 80px;
+      background: #ffffff;
+      border-top: 1px solid #e5e7eb;
+      padding: 30px;
+      text-align: center;
+      color: #6b7280;
+      font-size: 14px;
+    }
+
+    footer a {
+      margin: 0 10px;
+      color: #0f172a;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    footer a:hover { color: #22c55e; }
+
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo-wrap">
+    AiHousing<div class="logo-dot"></div>
+  </div>
+
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="sample-report.html">Sample</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="help.html">Help</a>
+    <a href="dashboard.html" class="active">Dashboard</a>
+  </nav>
+</header>
+
+
+<div class="page">
+
+  <!-- TOP ROW: TITLE + BUTTON -->
+  <div class="dash-top">
+    <div>
+      <div class="dash-title">Your Dashboard</div>
+      <div class="dash-subtitle">
+        View your reports, manage payments and start new analyses from one place.
+      </div>
+    </div>
+
+    <a href="index.html" class="btn-primary">
+      + Generate new report
+    </a>
+  </div>
+
+  <!-- MAIN GRID -->
+  <div class="grid-main">
+
+    <!-- LEFT: OVERVIEW + REPORTS -->
+    <div>
+
+      <!-- OVERVIEW CARD -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Account overview</div>
+          <div class="card-badge">Unlimited plan active</div>
+        </div>
+        <div class="card-body">
+          <div class="overview-grid">
+            <div class="stat-pill">
+              <div class="stat-label">Current plan</div>
+              <div class="stat-value">Unlimited (£49.89/mo)</div>
+            </div>
+            <div class="stat-pill">
+              <div class="stat-label">Reports this month</div>
+              <div class="stat-value">7</div>
+            </div>
+            <div class="stat-pill">
+              <div class="stat-label">Total reports</div>
+              <div class="stat-value">19</div>
+            </div>
+            <div class="stat-pill">
+              <div class="stat-label">Next billing</div>
+              <div class="stat-value">26 Dec 2025</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MY REPORTS CARD -->
+      <div class="card" style="margin-top: 20px;">
+        <div class="card-header">
+          <div class="card-title">My reports</div>
+          <div class="card-badge">Last 3 reports</div>
+        </div>
+
+        <div class="card-body">
+          <div class="report-list">
+
+            <div class="report-item">
+              <div class="report-main">
+                <div class="report-line-1">E14 5AB · 3-bed terrace</div>
+                <div class="report-line-2">
+                  Generated: 20 Nov 2025 · Overall rating: 8.1/10 · Area risk: Medium
+                </div>
+              </div>
+              <div class="report-meta">
+                <strong>View report</strong>
+                <a href="#" class="report-link">Open PDF</a>
+              </div>
+            </div>
+
+            <div class="report-item">
+              <div class="report-main">
+                <div class="report-line-1">NG9 2GG · Semi-detached</div>
+                <div class="report-line-2">
+                  Generated: 12 Nov 2025 · Overall rating: 7.4/10 · Area risk: Low
+                </div>
+              </div>
+              <div class="report-meta">
+                <strong>View report</strong>
+                <a href="#" class="report-link">Open PDF</a>
+              </div>
+            </div>
+
+            <div class="report-item">
+              <div class="report-main">
+                <div class="report-line-1">SW1A 1AA · Flat</div>
+                <div class="report-line-2">
+                  Generated: 8 Nov 2025 · Overall rating: 6.9/10 · Area risk: High
+                </div>
+              </div>
+              <div class="report-meta">
+                <strong>View report</strong>
+                <a href="#" class="report-link">Open PDF</a>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT: PAYMENTS + QUICK GENERATE -->
+    <div>
+
+      <!-- PAYMENTS CARD -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Payments & subscription</div>
+        </div>
+
+        <div class="card-body">
+          <p style="font-size:14px;margin-bottom:10px;">
+            You’re on the <strong>Unlimited monthly plan</strong>.  
+            View your recent payments and manage billing below.
+          </p>
+
+          <div class="payments-list">
+
+            <div class="payment-item">
+              <div>
+                <div><strong>£49.89</strong> · Unlimited plan</div>
+                <div style="color:#6b7280;font-size:12px;">26 Nov 2025 · Card ending ··42</div>
+              </div>
+              <div>
+                <span class="payment-status">Paid</span>
+              </div>
+            </div>
+
+            <div class="payment-item">
+              <div>
+                <div><strong>£49.89</strong> · Unlimited plan</div>
+                <div style="color:#6b7280;font-size:12px;">26 Oct 2025 · Card ending ··42</div>
+              </div>
+              <div>
+                <span class="payment-status">Paid</span>
+              </div>
+            </div>
+
+            <div class="payment-item">
+              <div>
+                <div><strong>£12.49</strong> · Single report</div>
+                <div style="color:#6b7280;font-size:12px;">10 Oct 2025 · Card ending ··42</div>
+              </div>
+              <div>
+                <span class="payment-status payment-failed">Refunded</span>
+              </div>
+            </div>
+
+          </div>
+
+          <div style="margin-top:16px;display:flex;flex-wrap:wrap;gap:10px;">
+            <a href="pricing.html" class="btn-primary" style="padding:10px 16px;font-size:14px;">Change plan</a>
+            <a href="#" class="btn-primary" style="background:#e5e7eb;color:#0f172a;padding:10px 16px;font-size:14px;">
+              Manage billing
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- QUICK GENERATE CARD -->
+      <div class="card" style="margin-top: 20px;">
+        <div class="card-header">
+          <div class="card-title">Quick generate</div>
+        </div>
+
+        <div class="card-body">
+          <div class="pill-label">Start new report</div>
+
+          <div class="form-row">
+            <label>Postcode or address</label>
+            <input type="text" placeholder="e.g. E14 5AB or 10 High Street, London">
+          </div>
+
+          <div class="form-row">
+            <label>Rightmove / Zoopla link (optional)</label>
+            <input type="text" placeholder="Paste listing URL here">
+          </div>
+
+          <div class="upload-box">
+            <span>Upload photos</span>
+            Drag & drop multiple images here or click to browse.  
+            Interior, exterior, close-ups – the more detail, the better the report.
+          </div>
+
+          <button class="btn-primary" style="margin-top:12px;width:100%;">Generate report</button>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- BOTTOM GRID: ACCOUNT & SECURITY -->
+  <div class="grid-bottom">
+
+    <div class="card">
+  <div class="card-header">
+    <div class="card-title">Account settings</div>
+  </div>
+
+  <div class="card-body">
+    <div class="pill-label">Profile</div>
+
+    <p style="font-size:14px;margin-bottom:16px;">
+      Email: <strong>you@example.com</strong><br>
+      Member since: <strong>2025</strong>
+    </p>
+
+    <hr style="border:0;border-top:1px solid #e5e7eb;margin:14px 0;">
+
+    <div class="pill-label">Change password</div>
+
+    <form style="margin-top:10px; display:flex; flex-direction:column; gap:12px;">
+
+      <div>
+        <label style="font-size:13px;font-weight:600;">Current password</label>
+        <input type="password" placeholder="Enter current password"
+               style="width:100%;padding:10px;border:1px solid #d1d5db;
+               border-radius:10px;font-size:14px;background:#f9fafb;">
+      </div>
+
+      <div>
+        <label style="font-size:13px;font-weight:600;">New password</label>
+        <input type="password" placeholder="Enter new password"
+               style="width:100%;padding:10px;border:1px solid #d1d5db;
+               border-radius:10px;font-size:14px;background:#f9fafb;">
+      </div>
+
+      <div>
+        <label style="font-size:13px;font-weight:600;">Confirm new password</label>
+        <input type="password" placeholder="Repeat new password"
+               style="width:100%;padding:10px;border:1px solid #d1d5db;
+               border-radius:10px;font-size:14px;background:#f9fafb;">
+      </div>
+
+      <button class="btn-primary" 
+              style="width:100%;margin-top:8px;">
+        Update password
+      </button>
+    </form>
+
+  </div>
+</div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Security</div>
+      </div>
+      <div class="card-body">
+        <div class="pill-label">Login & device safety</div>
+        <p style="font-size:14px;margin-bottom:8px;">
+          AiHousing uses encrypted connections and secure authentication.
+        </p>
+        <p style="font-size:13px;color:#6b7280;margin-bottom:0;">
+          In a future version, this area will show two-factor authentication, active sessions and login history to give
+          you more control over your account’s security.
+        </p>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+
+<footer>
+  © 2025 AiHousing · 
+  <a href="terms.html">Terms</a> · 
+  <a href="privacy.html">Privacy</a> · 
+  <a href="cookies.html">Cookies</a> · 
+  <a href="contact.html">Contact</a>
+</footer>
+
+</body>
+</html>

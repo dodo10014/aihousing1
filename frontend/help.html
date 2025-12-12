@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Help & FAQ – AiHousing</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Inter", sans-serif;
+      background: #ffffff;
+      color: #0f172a;
+    }
+
+    /* HEADER */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #ffffffee;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 16px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      backdrop-filter: blur(12px);
+    }
+
+    .logo-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: #0f172a;
+    }
+
+    .logo-dot {
+      width: 9px;
+      height: 9px;
+      background: #22c55e;
+      border-radius: 50%;
+      margin-left: 4px;
+      margin-bottom: -2px;
+      box-shadow: 0 0 8px #22c55e;
+    }
+
+    nav {
+      display: flex;
+      gap: 26px;
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    nav a {
+      color: #0f172a;
+      text-decoration: none;
+      transition: 0.2s;
+    }
+
+    nav a:hover { color: #22c55e; }
+
+    /* PAGE */
+    .page {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 60px 20px 100px;
+    }
+
+    .hero {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .hero h1 {
+      font-size: 42px;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    .hero p {
+      font-size: 16px;
+      color: #6b7280;
+    }
+
+    /* FAQ SECTION */
+    .faq-list {
+      margin-top: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .faq-item {
+      border: 1px solid #e5e7eb;
+      border-radius: 14px;
+      padding: 18px 20px;
+      background: #ffffff;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.04);
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .faq-item:hover {
+      border-color: #cbd5e1;
+      box-shadow: 0 14px 34px rgba(0,0,0,0.06);
+    }
+
+    .faq-question {
+      font-size: 17px;
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .faq-answer {
+      margin-top: 14px;
+      font-size: 15px;
+      color: #6b7280;
+      line-height: 1.6;
+      display: none;
+    }
+
+    .faq-item.open .faq-answer {
+      display: block;
+    }
+
+    .faq-item.open .arrow {
+      transform: rotate(180deg);
+    }
+
+    .arrow {
+      transition: 0.2s;
+    }
+
+    /* FOOTER */
+    footer {
+      margin-top: 80px;
+      background: #ffffff;
+      border-top: 1px solid #e5e7eb;
+      padding: 30px;
+      text-align: center;
+      color: #6b7280;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    footer a {
+      margin: 0 10px;
+      color: #0f172a;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    footer a:hover { color: #22c55e; }
+  </style>
+
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo-wrap">
+    AiHousing<div class="logo-dot"></div>
+  </div>
+
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="sample-report.html">Sample</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="help.html">Help</a>
+    <a href="login.html">Login</a>
+    <a href="register.html">Register</a>
+  </nav>
+</header>
+
+
+<div class="page">
+
+  <div class="hero">
+    <h1>Help & FAQ</h1>
+    <p>Quick answers to the most common questions.</p>
+  </div>
+
+
+  <!-- FAQ LIST -->
+  <div class="faq-list">
+
+    <!-- Q1 -->
+    <div class="faq-item">
+      <div class="faq-question">
+        How does AiHousing generate reports?
+        <span class="arrow">▼</span>
+      </div>
+      <div class="faq-answer">
+        Our system analyses property photos using AI computer vision, then merges them with UK datasets (EPC, crime, flood, land registry sold prices).  
+        The result is a clean, readable report designed to highlight risks, defects, renovation ideas and negotiation points.
+      </div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="faq-item">
+      <div class="faq-question">
+        Do you store my photos?
+        <span class="arrow">▼</span>
+      </div>
+      <div class="faq-answer">
+        No. Your photos are processed securely in temporary memory and automatically deleted after the report is generated.
+      </div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="faq-item">
+      <div class="faq-question">
+        Is this a replacement for a RICS survey?
+        <span class="arrow">▼</span>
+      </div>
+      <div class="faq-answer">
+        No. AiHousing provides early-stage analysis to help you shortlist properties.  
+        For legal, structural or mortgage requirements, a certified RICS survey is still recommended.
+      </div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="faq-item">
+      <div class="faq-question">
+        Can I get a refund?
+        <span class="arrow">▼</span>
+      </div>
+      <div class="faq-answer">
+        If your report fails to generate due to a technical error, we can issue a refund or credit your account with a free report.  
+        Refunds do not apply to successfully generated reports, as analysis costs are consumed.
+      </div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="faq-item">
+      <div class="faq-question">
+        How long does a report take to generate?
+        <span class="arrow">▼</span>
+      </div>
+      <div class="faq-answer">
+        Most reports are generated in under 60 seconds, depending on the number of photos and data availability in your area.
+      </div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="faq-item">
+      <div class="faq-question">
+        How does the Unlimited plan work?
+        <span class="arrow">▼</span>
+      </div>
+      <div class="faq-answer">
+        For £49.89/month, you can generate unlimited AiHousing reports.  
+        Cancel anytime directly from your account.
+      </div>
+    </div>
+
+    <!-- Q7 -->
+    <div class="faq-item">
+      <div class="faq-question">
+        Who can I contact for support?
+        <span class="arrow">▼</span>
+      </div>
+      <div class="faq-answer">
+        You can reach us anytime at:  
+        <br><strong>support@aihousing.uk</strong>
+      </div>
+    </div>
+
+    <!-- EXTRA FAQs (created by me for premium feel) -->
+
+    <div class="faq-item">
+      <div class="faq-question">
+        What types of properties does AiHousing support?
+        <span class="arrow">▼</span>
+      </div>
+      <div class="faq-answer">
+        Houses, flats, bungalows, new-builds, Victorian terraces, and commercial units.  
+        If the listing has photos, AiHousing can analyse it.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        Is my data secure?
+        <span class="arrow">▼</span>
+      </div>
+      <div class="faq-answer">
+        Yes — all data is processed using encrypted connections.  
+        We never sell your personal information or store your photos permanently.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        Can I upload my own viewing photos?
+        <span class="arrow">▼</span>
+      </div>
+      <div class="faq-answer">
+        Absolutely.  
+        Upload your own photos to get an even more accurate analysis compared to using Rightmove/Zoopla images alone.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        Do you analyse interior and exterior issues?
+        <span class="arrow">▼</span>
+      </div>
+      <div class="faq-answer">
+        Yes — damp, cracks, mould patterns, ventilation issues, roof wear, exterior walls, layout concerns, and more.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-question">
+        Do you save my reports?
+        <span class="arrow">▼</span>
+      </div>
+      <div class="faq-answer">
+        If you have an account, your reports appear in your dashboard for future access.  
+        Free users can download reports but they are not stored long-term.
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- FOOTER -->
+<footer>
+  © 2025 AiHousing  
+  · <a href="terms.html">Terms</a>  
+  · <a href="privacy.html">Privacy</a>  
+  · <a href="cookies.html">Cookies</a>  
+  · <a href="contact.html">Contact</a>
+</footer>
+
+
+<script>
+// FAQ ACCORDION
+document.querySelectorAll('.faq-item').forEach(item => {
+  item.addEventListener('click', () => {
+    item.classList.toggle('open');
+  });
+});
+</script>
+
+</body>
+</html>
